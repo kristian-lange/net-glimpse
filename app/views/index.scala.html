@@ -1,0 +1,16 @@
+@()
+
+@main("EtherVisu") {
+  <ul></ul>
+
+<script>
+  var socket = new WebSocket(
+			((window.location.protocol === "https:") ? "wss://" : "ws://") +
+			window.location.host + "/socket");
+
+  socket.onmessage = function (event) {
+    var str = JSON.stringify(JSON.parse(event.data), null, 4);
+    $('ul').append("<li><code><pre>" + str + "</pre></code></li>");
+  };
+</script>
+}

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="SBT: com.typesafe.play:play-iteratees_2.11:2.5.14:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.play/play-iteratees_2.11/jars/play-iteratees_2.11-2.5.14.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.play/play-iteratees_2.11/srcs/play-iteratees_2.11-2.5.14-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

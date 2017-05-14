@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="SBT: com.fasterxml:classmate:1.1.0:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.fasterxml/classmate/bundles/classmate-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.fasterxml/classmate/srcs/classmate-1.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="SBT: net.jodah:typetools:0.4.4:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/net.jodah/typetools/bundles/typetools-0.4.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/net.jodah/typetools/srcs/typetools-0.4.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
