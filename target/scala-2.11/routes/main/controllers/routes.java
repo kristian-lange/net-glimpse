@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
-// @SOURCE:/home/madsen/idea-workspace/play-java-seed/conf/routes
-// @DATE:Sat May 13 18:49:53 CEST 2017
+// @SOURCE:/home/madsen/idea-workspace/ether-visu-web/conf/routes
+// @DATE:Sun May 14 18:49:08 CEST 2017
 
 package controllers;
 

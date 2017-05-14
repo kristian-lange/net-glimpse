@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.pcap4j.core.*;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IpPacket;
-import org.slf4j.Logger;
+import play.Configuration;
+import play.Logger;
+import play.Logger.ALogger;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
@@ -14,18 +16,19 @@ import play.mvc.Result;
 import play.mvc.WebSocket;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.concurrent.CompletableFuture;
 
 public class HomeController extends Controller {
 
-    private Logger logger = org.slf4j.LoggerFactory.getLogger("controllers.HomeController");
+    private ALogger logger = Logger.of(HomeController.class);
 
     private final HttpExecutionContext httpExecutionContext;
+    private final String nifName;
 
     @Inject
-    public HomeController(HttpExecutionContext httpExecutionContext) {
+    public HomeController(HttpExecutionContext httpExecutionContext, Configuration configuration) {
         this.httpExecutionContext = httpExecutionContext;
+        this.nifName = configuration.getString("nifName", "any");
     }
 
     public Result index() throws PcapNativeException, NotOpenException {
@@ -39,7 +42,7 @@ public class HomeController extends Controller {
             Runnable r = () -> {
                 pcapToSocket(pcapHandle, out);
             };
-            CompletableFuture c = CompletableFuture.runAsync(r, httpExecutionContext.current());
+            CompletableFuture.runAsync(r, httpExecutionContext.current());
 
             // For each event received on the socket,
             in.onMessage(System.out::println);
@@ -51,8 +54,8 @@ public class HomeController extends Controller {
     }
 
     private PcapHandle openPcap() throws PcapNativeException {
-        // TODO make config
-        PcapNetworkInterface nif = Pcaps.getDevByName("wlp3s0");
+        PcapNetworkInterface nif = Pcaps.getDevByName(nifName);
+        logger.info("Forward network traffic from " + nif.getName() + "(" + nif.getAddresses() + ")");
         return nif.openLive(65536, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10);
     }
 
@@ -80,7 +83,7 @@ public class HomeController extends Controller {
         };
 
         try {
-            pcapHandle.loop(1000, listener);
+            pcapHandle.loop(-1, listener);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (PcapNativeException e) {

@@ -65,8 +65,8 @@ Seq[Any](format.raw/*1.4*/("""
 object index extends index_Scope0.index
               /*
                   -- GENERATED --
-                  DATE: Sun May 14 16:50:06 CEST 2017
-                  SOURCE: /home/madsen/idea-workspace/play-java-seed/app/views/index.scala.html
+                  DATE: Sun May 14 18:49:08 CEST 2017
+                  SOURCE: /home/madsen/idea-workspace/ether-visu-web/app/views/index.scala.html
                   HASH: 6683ed8a8d1d76ab18585dd2de39678ed51d341f
                   MATRIX: 738->1|834->3|862->6|887->23|926->25|955->28|1178->223|1207->224|1239->229|1395->358|1423->359|1466->372
                   LINES: 27->1|32->1|34->3|34->3|34->3|35->4|42->11|42->11|43->12|45->14|45->14|47->16
