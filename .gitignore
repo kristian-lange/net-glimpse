@@ -1,7 +1,7 @@
 logs
-project/project
-project/target
-target
+project/project/
+project/target/
+target/
 /.target
 bin
 tmp
