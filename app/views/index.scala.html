@@ -6,7 +6,7 @@
 <script>
   var socket = new WebSocket(
 			((window.location.protocol === "https:") ? "wss://" : "ws://") +
-			window.location.host + "/socket");
+			window.location.host + "/ether");
 
   socket.onmessage = function (event) {
     var str = JSON.stringify(JSON.parse(event.data), null, 4);

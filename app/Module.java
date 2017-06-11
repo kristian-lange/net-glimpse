@@ -1,4 +1,6 @@
 import com.google.inject.AbstractModule;
+import play.libs.akka.AkkaGuiceSupport;
+import services.PcapInitializer;
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -10,11 +12,10 @@ import com.google.inject.AbstractModule;
  * adding `play.modules.enabled` settings to the `application.conf`
  * configuration file.
  */
-public class Module extends AbstractModule {
+public class Module extends AbstractModule implements AkkaGuiceSupport {
 
     @Override
-    public void configure() {
-
+    protected void configure() {
+        bind(PcapInitializer.class).asEagerSingleton();
     }
-
 }

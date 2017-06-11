@@ -2,10 +2,11 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.pcap4j.core.*;
+import org.pcap4j.core.NotOpenException;
+import org.pcap4j.core.PcapHandle;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IpPacket;
-import play.Configuration;
+import org.pcap4j.packet.Packet;
 import play.Logger;
 import play.Logger.ALogger;
 import play.libs.Json;
@@ -14,83 +15,101 @@ import play.mvc.Controller;
 import play.mvc.LegacyWebSocket;
 import play.mvc.Result;
 import play.mvc.WebSocket;
+import services.PcapInitializer;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.concurrent.CompletableFuture;
 
+@Singleton
 public class HomeController extends Controller {
 
-    private ALogger logger = Logger.of(HomeController.class);
+	private static final ALogger LOGGER = Logger.of(HomeController.class);
 
-    private final HttpExecutionContext httpExecutionContext;
-    private final String nifName;
+	private final HttpExecutionContext httpExecutionContext;
+	private final PcapInitializer pcapInitializer;
 
-    @Inject
-    public HomeController(HttpExecutionContext httpExecutionContext, Configuration configuration) {
-        this.httpExecutionContext = httpExecutionContext;
-        this.nifName = configuration.getString("nifName", "any");
-    }
+	@Inject
+	public HomeController(HttpExecutionContext httpExecutionContext,
+			PcapInitializer pcapInitializer) {
+		this.httpExecutionContext = httpExecutionContext;
+		this.pcapInitializer = pcapInitializer;
+	}
 
-    public Result index() throws PcapNativeException, NotOpenException {
-        return ok(views.html.index.render());
-    }
+	public Result index() {
+		return ok(views.html.index.render());
+	}
 
-    public LegacyWebSocket<JsonNode> socket() throws PcapNativeException {
-        PcapHandle pcapHandle = openPcap();
+	// TODO support multiple clients
+	// TODO use Akka Stream WebSockets
+	public LegacyWebSocket<JsonNode> ether() {
+		return WebSocket.whenReady((in, out) -> {
+			// In extra thread write pcap to WebSocket.out
+			Runnable r = () -> {
+				pcapToWebSocket(pcapInitializer.getPcapHandle(), out);
+			};
+			CompletableFuture pcapToWebSocketFuture = CompletableFuture
+					.runAsync(r, httpExecutionContext.current());
 
-        return WebSocket.whenReady((in, out) -> {
-            Runnable r = () -> {
-                pcapToSocket(pcapHandle, out);
-            };
-            CompletableFuture.runAsync(r, httpExecutionContext.current());
+			// For each event received on the socket
+			in.onMessage(System.out::println);
 
-            // For each event received on the socket,
-            in.onMessage(System.out::println);
-            // When the socket is closed.
-            in.onClose(() -> {
-                pcapHandle.close();
-            });
-        });
-    }
+			// When the socket is closed
+			in.onClose(() -> {
+				pcapToWebSocketFuture.cancel(true);
+				LOGGER.info("Closed WebSocket");
+			});
 
-    private PcapHandle openPcap() throws PcapNativeException {
-        PcapNetworkInterface nif = Pcaps.getDevByName(nifName);
-        logger.info("Forward network traffic from " + nif.getName() + "(" + nif.getAddresses() + ")");
-        return nif.openLive(65536, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10);
-    }
+			LOGGER.info(
+					"Opened WebSocket and writing network interface {} into it",
+					pcapInitializer.getNetworkInterfaceName());
+		});
+	}
 
-    private void pcapToSocket(PcapHandle pcapHandle, WebSocket.Out<JsonNode> out) {
-        PacketListener listener = (packet) -> {
-            if (packet != null) {
-                ObjectNode outNode = Json.newObject().put("timestamp", pcapHandle.getTimestamp().toString());
-                EthernetPacket ethernetPacket = packet.get(EthernetPacket.class);
-                if (ethernetPacket != null) {
-                    EthernetPacket.EthernetHeader header = ethernetPacket.getHeader();
-                    outNode.put("macSrcAddr", header.getSrcAddr().toString());
-                    outNode.put("macDstAddr", header.getDstAddr().toString());
-                    outNode.put("macType", header.getType().valueAsString());
-                }
-                IpPacket ipPacket = packet.get(IpPacket.class);
-                if (ipPacket != null) {
-                    IpPacket.IpHeader header = ipPacket.getHeader();
-                    outNode.put("ipSrcAddr", header.getSrcAddr().toString());
-                    outNode.put("ipDstAddr", header.getDstAddr().toString());
-                    outNode.put("ipProtocol", header.getProtocol().valueAsString());
-                    outNode.put("ipVersion", header.getVersion().valueAsString());
-                }
-                out.write(outNode);
-            }
-        };
+	private void pcapToWebSocket(PcapHandle pcapHandle,
+			WebSocket.Out<JsonNode> out) {
+		while (true) {
+			try {
+				Packet packet = pcapHandle.getNextPacket();
+				if (packet != null) {
+					writePacketToWebSocketOut(packet, out, pcapHandle);
+				}
+			} catch (NotOpenException e) {
+				break;
+			}
+		}
+	}
 
-        try {
-            pcapHandle.loop(-1, listener);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (PcapNativeException e) {
-            e.printStackTrace();
-        } catch (NotOpenException e) {
-            e.printStackTrace();
-        }
-    }
+	private void writePacketToWebSocketOut(Packet packet,
+			WebSocket.Out<JsonNode> out, PcapHandle pcapHandle) {
+		ObjectNode outNode = Json.newObject();
+		outNode.put("timestamp", pcapHandle.getTimestamp().toString());
+		fillNodeWithEthernetPacket(outNode, packet.get(EthernetPacket.class));
+		fillNodeWithIpPacket(outNode, packet.get(IpPacket.class));
+		out.write(outNode);
+	}
+
+	private void fillNodeWithEthernetPacket(ObjectNode outNode,
+			EthernetPacket ethernetPacket) {
+		if (ethernetPacket != null) {
+			EthernetPacket.EthernetHeader header =
+					ethernetPacket.getHeader();
+			outNode.put("macSrcAddr", header.getSrcAddr().toString());
+			outNode.put("macDstAddr", header.getDstAddr().toString());
+			outNode.put("macType", header.getType().valueAsString());
+		}
+	}
+
+	private void fillNodeWithIpPacket(ObjectNode outNode, IpPacket ipPacket) {
+		if (ipPacket != null) {
+			IpPacket.IpHeader header = ipPacket.getHeader();
+			outNode.put("ipSrcAddr", header.getSrcAddr().toString());
+			outNode.put("ipDstAddr", header.getDstAddr().toString());
+			outNode.put("ipProtocol",
+					header.getProtocol().valueAsString());
+			outNode.put("ipVersion",
+					header.getVersion().valueAsString());
+		}
+	}
 
 }
