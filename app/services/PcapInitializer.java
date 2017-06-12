@@ -25,7 +25,7 @@ public class PcapInitializer {
 	public PcapInitializer(ApplicationLifecycle lifecycle,
 			Configuration configuration) {
 		this.networkInterfaceName =
-				configuration.getString("networkinterface", "any");
+				configuration.getString("networkinterface", "wlp3s0");
 		int snaplen = configuration.getInt("snaplen", 65536);
 
 		pcapHandle = openPcap(networkInterfaceName, snaplen);

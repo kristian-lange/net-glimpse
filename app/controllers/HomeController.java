@@ -40,6 +40,10 @@ public class HomeController extends Controller {
 		return ok(views.html.index.render());
 	}
 
+	public Result p5visu() {
+		return ok(views.html.p5visu.render());
+	}
+
 	// TODO support multiple clients
 	// TODO use Akka Stream WebSockets
 	public LegacyWebSocket<JsonNode> ether() {

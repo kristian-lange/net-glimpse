@@ -4,6 +4,7 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
+GET     /p5visu                     controllers.HomeController.p5visu
 GET     /ether                      controllers.HomeController.ether
 
 # Map static resources from the /public folder to the /assets URL path
