@@ -1,5 +1,7 @@
 package controllers;
 
+import akka.actor.ActorRef;
+import akka.actor.Props;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.pcap4j.core.NotOpenException;
@@ -15,9 +17,12 @@ import play.mvc.Controller;
 import play.mvc.LegacyWebSocket;
 import play.mvc.Result;
 import play.mvc.WebSocket;
+import services.WebSocketActor;
 import services.PcapInitializer;
+import services.WebSocketDispatcher;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.concurrent.CompletableFuture;
 
@@ -28,6 +33,10 @@ public class HomeController extends Controller {
 
 	private final HttpExecutionContext httpExecutionContext;
 	private final PcapInitializer pcapInitializer;
+
+	@Inject
+	@Named("websocket-dispatcher-actor")
+	private ActorRef webSocketDispatcherActorRef;
 
 	@Inject
 	public HomeController(HttpExecutionContext httpExecutionContext,
@@ -64,6 +73,8 @@ public class HomeController extends Controller {
 				LOGGER.info("Closed WebSocket");
 			});
 
+			Props.create(WebSocketActor.class, out,	webSocketDispatcherActorRef);
+
 			LOGGER.info(
 					"Opened WebSocket and writing network interface {} into it",
 					pcapInitializer.getNetworkInterfaceName());
@@ -77,6 +88,8 @@ public class HomeController extends Controller {
 				Packet packet = pcapHandle.getNextPacket();
 				if (packet != null) {
 					writePacketToWebSocketOut(packet, out, pcapHandle);
+
+
 				}
 			} catch (NotOpenException e) {
 				break;
@@ -91,6 +104,7 @@ public class HomeController extends Controller {
 		fillNodeWithEthernetPacket(outNode, packet.get(EthernetPacket.class));
 		fillNodeWithIpPacket(outNode, packet.get(IpPacket.class));
 		out.write(outNode);
+		webSocketDispatcherActorRef.tell(outNode, ActorRef.noSender());
 	}
 
 	private void fillNodeWithEthernetPacket(ObjectNode outNode,
@@ -115,5 +129,35 @@ public class HomeController extends Controller {
 					header.getVersion().valueAsString());
 		}
 	}
+
+	public LegacyWebSocket<JsonNode> ether2() {
+		return createWebSocket();
+	}
+
+	private LegacyWebSocket<JsonNode> createWebSocket() {
+		return new LegacyWebSocket<JsonNode>() {
+
+			@Override
+			public void onReady(final WebSocket.In<JsonNode> in, final WebSocket.Out<JsonNode> out) {
+			}
+
+			public boolean isActor() {
+				return true;
+			}
+
+			public Props actorProps(ActorRef out) {
+				try {
+					return Props.create(WebSocketActor.class, out);
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Error e) {
+					throw e;
+				} catch (Throwable t) {
+					throw new RuntimeException(t);
+				}
+			}
+		};
+	}
+
 
 }

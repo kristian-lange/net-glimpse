@@ -1,6 +1,7 @@
 import com.google.inject.AbstractModule;
 import play.libs.akka.AkkaGuiceSupport;
 import services.PcapInitializer;
+import services.WebSocketDispatcher;
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -17,5 +18,8 @@ public class Module extends AbstractModule implements AkkaGuiceSupport {
     @Override
     protected void configure() {
         bind(PcapInitializer.class).asEagerSingleton();
+
+        // Config which Akka actors should be handled by Guice
+        bindActor(WebSocketDispatcher.class, "websocket-dispatcher-actor");
     }
 }
