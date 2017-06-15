@@ -25,7 +25,7 @@ public class PcapInitializer {
 	public PcapInitializer(ApplicationLifecycle lifecycle,
 			Configuration configuration) {
 		this.networkInterfaceName =
-				configuration.getString("networkinterface", "wlp3s0");
+				configuration.getString("networkinterface", "empty");
 		int snaplen = configuration.getInt("snaplen", 65536);
 
 		pcapHandle = openPcap(networkInterfaceName, snaplen);
@@ -39,12 +39,16 @@ public class PcapInitializer {
 	private PcapHandle openPcap(String networkInterfaceName, int snaplen) {
 		try {
 			PcapNetworkInterface nif = Pcaps.getDevByName(networkInterfaceName);
-			logger.info("Forward network traffic from " + nif.getName() + "(" +
-					nif.getAddresses() + ")");
+			if (nif == null) {
+				throw new RuntimeException("Couldn't open network interface " + networkInterfaceName);
+			} else {
+				logger.info("Forward network traffic from " + nif.getName() + "(" +
+						nif.getAddresses() + ")");
+			}
 			return nif.openLive(snaplen,
 					PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10);
 		} catch (PcapNativeException e) {
-			logger.error("Couldn't open network interface", e);
+			logger.error("Couldn't open network interface " + networkInterfaceName, e);
 			throw new RuntimeException(e);
 		}
 	}
