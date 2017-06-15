@@ -1,6 +1,12 @@
-@()
-
-@main("EtherVisuWeb") {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>EtherVisuWeb</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+  <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+</head>
+<body>
   <ul></ul>
 
 <script>
@@ -13,4 +19,5 @@
     $('ul').append("<li><code><pre>" + str + "</pre></code></li>");
   };
 </script>
-}
+</body>
+</html>

@@ -4,6 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.JsonNode;
+import play.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,25 +12,16 @@ import java.util.List;
 /**
  * Created by klange on 15.06.17.
  */
-public class WebSocketDispatcher extends UntypedActor {
+public class PcapDispatcherActor extends UntypedActor {
+
+    private static final Logger.ALogger LOGGER = Logger.of(PcapDispatcherActor.class);
 
     public enum Protocol {REGISTER, UNREGISTER};
 
     private List<ActorRef> webSocketList = new ArrayList();
 
-    /**
-     * Akka method to get this Actor started. Changes in props must be done in
-     * the constructor too.
-     */
     public static Props props() {
-        return Props.create(WebSocketDispatcher.class);
-    }
-
-    public WebSocketDispatcher() {
-    }
-
-    @Override
-    public void postStop() {
+        return Props.create(PcapDispatcherActor.class);
     }
 
     @Override
@@ -38,8 +30,10 @@ public class WebSocketDispatcher extends UntypedActor {
             webSocketList.forEach(actorRef -> actorRef.tell(msg, self()));
         } else if (Protocol.REGISTER.equals(msg)) {
             webSocketList.add(sender());
+            LOGGER.info("registered WebSocket actor");
         } else if (Protocol.UNREGISTER.equals(msg)) {
             webSocketList.remove(sender());
+            LOGGER.info("unregistered WebSocket actor");
         } else {
             unhandled(msg);
         }

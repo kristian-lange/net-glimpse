@@ -4,15 +4,11 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.HomeController;
-import play.Logger;
 
 /**
  * Created by klange on 15.06.17.
  */
 public class WebSocketActor extends UntypedActor {
-
-    private static final Logger.ALogger LOGGER = Logger.of(WebSocketActor.class);
 
     private final ActorRef out;
     private ActorRef webSocketDispatcher;
@@ -33,20 +29,21 @@ public class WebSocketActor extends UntypedActor {
 
     @Override
     public void preStart() {
-        webSocketDispatcher.tell(WebSocketDispatcher.Protocol.REGISTER, self());
+        webSocketDispatcher.tell(PcapDispatcherActor.Protocol.REGISTER, self());
     }
 
     @Override
     public void postStop() {
-        webSocketDispatcher.tell(WebSocketDispatcher.Protocol.UNREGISTER, self());
+        webSocketDispatcher.tell(PcapDispatcherActor.Protocol.UNREGISTER, self());
     }
 
     @Override
     public void onReceive(Object msg) throws Exception {
         if (msg instanceof JsonNode) {
             JsonNode jsonNode = (JsonNode) msg;
-            LOGGER.info("msg received: " + jsonNode.asText());
+            out.tell(jsonNode, self());
+        } else {
+            unhandled(msg);
         }
-        unhandled(msg);
     }
 }
