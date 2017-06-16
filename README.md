@@ -1,6 +1,8 @@
 # EtherVisuWeb
 
-Streaming of data from your local network interfaces via WebSockets. The WebSockets can be consumed by e.g. a browser. It is possible to stream _different_ network interfaces in parallel. It is also possible to stream the _same_ network interface to multiple destinations.
+Streaming of data from your local network interfaces via WebSockets. The WebSockets can be consumed by e.g. a browser.
+* It is possible to stream _different_ network interfaces in parallel.
+* It is also possible to stream the _same_ network interface to multiple destinations.
 
 ![Schema](docs/schema.png)
 
