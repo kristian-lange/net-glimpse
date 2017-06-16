@@ -1,6 +1,6 @@
 # EtherVisuWeb
 
-Streaming of data from local network interfaces via WebSockets. The WebSockets can be consumed by e.g. a browser.
+Streaming of data from your local network interfaces via WebSockets. The WebSockets can be consumed by e.g. a browser. It is possible to stream _different_ network interfaces in parallel. It is also possible to stream the _same_ network interface to multiple destinations.
 
 ![Schema](docs/schema.png)
 
@@ -19,8 +19,14 @@ Start EtherVisuWeb with
 
 All `-D` parameters are optional. `-DNIF` specifies the default network interface. 
 
+### Try out in your browser
+
 EtherVisuWeb comes with a basic example web page. Add the URL query parameter `nif` to specify the network interface.
 
 * Use default network interface specified with `-DNIF`: `http://172.23.1.81:9000/`
 * Specify network interface: `http://172.23.1.81:9000/?nif=enp0s25`
+
+### Use it in your stuff
+
+The endpoint to open a WebSocket to get the network data is `/ether`. Add the URL query parameter `nif` to specify the network interface, e.g. ``http://172.23.1.81:9000/ether?nif=enp0s25`.
 
