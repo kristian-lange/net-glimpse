@@ -18,6 +18,10 @@ ul {
   background-color: aquamarine;
 }
 
+.color-icmpv6 {
+  background-color: orange;
+}
+
 .color-arp {
   background-color: skyblue;
 }

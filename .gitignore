@@ -10,7 +10,7 @@ dist
 /play.crypto.secret
 /.idea
 /*.iml
-/out
+/webSocketOut
 /.idea_modules
 *.classpath
 .project

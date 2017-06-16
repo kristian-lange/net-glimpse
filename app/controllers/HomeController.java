@@ -9,6 +9,7 @@ import play.mvc.Controller;
 import play.mvc.LegacyWebSocket;
 import play.mvc.Result;
 import play.mvc.WebSocket;
+import services.PcapInitializer;
 import services.WebSocketActor;
 
 import javax.inject.Inject;
@@ -20,9 +21,12 @@ public class HomeController extends Controller {
 
 	private static final ALogger LOGGER = Logger.of(HomeController.class);
 
+	private final PcapInitializer pcapInitializer;
+
 	@Inject
-	@Named("pcap-dispatcher-actor")
-	private ActorRef pcapDispatcherActorRef;
+	public HomeController(PcapInitializer pcapInitializer) {
+		this.pcapInitializer = pcapInitializer;
+	}
 
 	public Result index() {
 		return ok(views.html.index.render());
@@ -32,7 +36,8 @@ public class HomeController extends Controller {
 		return ok(views.html.p5visu.render());
 	}
 
-	public LegacyWebSocket<JsonNode> ether() {
+	public LegacyWebSocket<JsonNode> ether(String nif) {
+		ActorRef pcapDispatcherActorRef = pcapInitializer.getPcapDispatcherActorRef(nif);
 		return WebSocket.withActor(out -> WebSocketActor.props(out,
 				pcapDispatcherActorRef));
 	}

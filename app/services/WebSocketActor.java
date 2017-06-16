@@ -6,12 +6,14 @@ import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
+ * Akka actor handling a single WebSocket. Sends messages to the WebSocket's webSocketOut, registers and unregisters itself to the NifDispatcherActor.
+ * <p>
  * Created by klange on 15.06.17.
  */
 public class WebSocketActor extends UntypedActor {
 
-    private final ActorRef out;
-    private ActorRef webSocketDispatcher;
+    private final ActorRef webSocketOut;
+    private final ActorRef webSocketDispatcher;
 
     /**
      * Akka method to get this Actor started. Changes in props must be done in
@@ -22,26 +24,26 @@ public class WebSocketActor extends UntypedActor {
                 webSocketDispatcher);
     }
 
-    public WebSocketActor(ActorRef out, ActorRef webSocketDispatcher) {
-        this.out = out;
+    public WebSocketActor(ActorRef webSocketOut, ActorRef webSocketDispatcher) {
+        this.webSocketOut = webSocketOut;
         this.webSocketDispatcher = webSocketDispatcher;
     }
 
     @Override
     public void preStart() {
-        webSocketDispatcher.tell(PcapDispatcherActor.Protocol.REGISTER, self());
+        webSocketDispatcher.tell(NifDispatcherActor.Protocol.REGISTER, self());
     }
 
     @Override
     public void postStop() {
-        webSocketDispatcher.tell(PcapDispatcherActor.Protocol.UNREGISTER, self());
+        webSocketDispatcher.tell(NifDispatcherActor.Protocol.UNREGISTER, self());
     }
 
     @Override
     public void onReceive(Object msg) throws Exception {
-        if (msg instanceof JsonNode) {
+        if(msg instanceof JsonNode) {
             JsonNode jsonNode = (JsonNode) msg;
-            out.tell(jsonNode, self());
+            webSocketOut.tell(jsonNode, self());
         } else {
             unhandled(msg);
         }

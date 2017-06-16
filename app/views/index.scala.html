@@ -10,27 +10,48 @@
   <ul></ul>
 
 <script>
+
+  var nif = getQueryParameterByName("nif");
+  var urlQueryStr = (nif) ? "?nif=" + nif : "";
+
   var socket = new WebSocket(
 			((window.location.protocol === "https:") ? "wss://" : "ws://") +
-			window.location.host + "/ether");
+			window.location.host + "/ether" + urlQueryStr);
 
   socket.onmessage = function (event) {
     var packet = JSON.parse(event.data);
     var packetStr = JSON.stringify(packet, null, 4);
+    var colorClass =getColor(packet);
+    $('ul').append('<li class="' + colorClass + '"><code><pre>' + packetStr + '</pre></code></li>');
+//    window.scrollTo(0, document.body.scrollHeight);
+  };
+
+  function getColor(packet) {
     var colorClass = "color-default";
     if (packet.ipProtocol && packet.ipProtocol == "UDP") {
-        colorClass = "color-udp";
+      colorClass = "color-udp";
     } else if (packet.ipProtocol && packet.ipProtocol == "TCP") {
       colorClass = "color-tcp";
     } else if (packet.ipProtocol && packet.ipProtocol == "IGMP") {
       colorClass = "color-igmp";
+    } else if (packet.ipProtocol && packet.ipProtocol == "ICMPv6") {
+      colorClass = "color-icmpv6";
     } else if (packet.macType == "ARP") {
       colorClass = "color-arp";
     }
+    return colorClass;
+  }
 
-    $('ul').append('<li class="' + colorClass + '"><code><pre>' + packetStr + '</pre></code></li>');
-//    window.scrollTo(0, document.body.scrollHeight);
-  };
+  function getQueryParameterByName(name) {
+    var url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
 </script>
 </body>
 </html>
