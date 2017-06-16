@@ -15,8 +15,21 @@
 			window.location.host + "/ether");
 
   socket.onmessage = function (event) {
-    var str = JSON.stringify(JSON.parse(event.data), null, 4);
-    $('ul').append("<li><code><pre>" + str + "</pre></code></li>");
+    var packet = JSON.parse(event.data);
+    var packetStr = JSON.stringify(packet, null, 4);
+    var colorClass = "color-default";
+    if (packet.ipProtocol && packet.ipProtocol == "UDP") {
+        colorClass = "color-udp";
+    } else if (packet.ipProtocol && packet.ipProtocol == "TCP") {
+      colorClass = "color-tcp";
+    } else if (packet.ipProtocol && packet.ipProtocol == "IGMP") {
+      colorClass = "color-igmp";
+    } else if (packet.macType == "ARP") {
+      colorClass = "color-arp";
+    }
+
+    $('ul').append('<li class="' + colorClass + '"><code><pre>' + packetStr + '</pre></code></li>');
+//    window.scrollTo(0, document.body.scrollHeight);
   };
 </script>
 </body>

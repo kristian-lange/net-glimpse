@@ -1,3 +1,23 @@
 ul {
   list-style-type: none;
 }
+
+.color-default {
+  background-color: white;
+}
+
+.color-udp {
+  background-color: lightpink;
+}
+
+.color-tcp {
+  background-color: gainsboro;
+}
+
+.color-igmp {
+  background-color: aquamarine;
+}
+
+.color-arp {
+  background-color: skyblue;
+}
