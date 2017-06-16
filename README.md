@@ -1,6 +1,6 @@
 # EtherVisuWeb
 
-![[schema.png]]
+![[docs/schema.png]]
 
 https://docs.google.com/presentation/d/1doWxeQn7H8Bfl2yWax2JzOW_HZRenSXes4Id7H_d_VY/edit?usp=sharing
 
