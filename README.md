@@ -28,5 +28,5 @@ EtherVisuWeb comes with a basic example web page. Add the URL query parameter `n
 
 ### Use it in your stuff
 
-The endpoint to open a WebSocket to get the network data is `/ether`. Add the URL query parameter `nif` to specify the network interface, e.g. ``http://172.23.1.81:9000/ether?nif=enp0s25`.
+The endpoint to open a WebSocket to get the network data is `/ether`. Add the URL query parameter `nif` to specify the network interface, e.g. `http://172.23.1.81:9000/ether?nif=enp0s25`.
 
