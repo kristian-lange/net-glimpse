@@ -32,10 +32,6 @@ public class HomeController extends Controller {
 		return ok(views.html.index.render());
 	}
 
-	public Result p5visu() {
-		return ok(views.html.p5visu.render());
-	}
-
 	public LegacyWebSocket<JsonNode> ether(String nif) {
 		ActorRef pcapDispatcherActorRef = pcapInitializer.getPcapDispatcherActorRef(nif);
 		return WebSocket.withActor(out -> WebSocketActor.props(out,

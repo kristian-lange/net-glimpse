@@ -1,5 +1,18 @@
+body {
+  background-color: rgb(200, 200, 200);
+}
+
 ul {
   list-style-type: none;
+  padding-left: 0px;
+}
+
+.glossaryBox {
+  width: 30px;
+  height: 20px;
+  border: 1px solid;
+  display: inline-block;
+  margin-right: 2px;  
 }
 
 .color-default {

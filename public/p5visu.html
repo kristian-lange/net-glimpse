@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>EtherVisuWeb</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/addons/p5.dom.min.js"></script>
+  <script src="assets/javascripts/toxiclibs.min.js"></script>
+  <script src="assets/graph.js"></script>
+  <script src="assets/p5visu.js"></script>
+  <link rel="stylesheet" media="screen" href="/assets/stylesheets/main.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
+</head>
+
+<body>
+  <p><b>EtherTypes</b> (links between nodes)</p>
+  <ul id="etherTypeGlossary">
+    <li>
+      <div id="box-IPv4" class="glossaryBox"></div>IPv4</li>
+    <li>
+      <div id="box-IPv6" class="glossaryBox"></div>IPv6</li>
+    <li>
+      <div id="box-ARP" class="glossaryBox"></div>ARP</li>
+    <li>
+      <div id="box-RARP" class="glossaryBox"></div>RARP</li>
+    <li>
+      <div id="box-PPP" class="glossaryBox"></div>PPP</li>
+    <li>
+      <div id="box-PPPoE-Discovery" class="glossaryBox"></div>PPPoE Discovery Stage</li>
+    <li>
+      <div id="box-PPPoE-Session" class="glossaryBox"></div>PPPoE Session Stage</li>
+    <li>
+      <div id="box-MPLS" class="glossaryBox"></div>MPLS</li>
+    <li>
+      <div id="box-VLAN-tagged-frames" class="glossaryBox"></div>IEEE 802.1Q VLAN-tagged frames</li>
+    <li>
+      <div id="box-Appletalk" class="glossaryBox"></div>Appletalk</li>
+    <li>
+      <div id="box-Ether-unknown" class="glossaryBox"></div>unknown</li>
+  </ul>
+
+  <script>
+    var nif = getQueryParameterByName("nif");
+    var urlQueryStr = (nif) ? "?nif=" + nif : "";
+
+    var graph = createNewGraph();
+
+    var VerletPhysics2D = toxi.physics2d.VerletPhysics2D,
+      VerletParticle2D = toxi.physics2d.VerletParticle2D,
+      VerletSpring2D = toxi.physics2d.VerletSpring2D,
+      VerletMinDistanceSpring2D = toxi.physics2d.VerletMinDistanceSpring2D,
+      AttractionBehavior = toxi.physics2d.behaviors.AttractionBehavior,
+      Vec2D = toxi.geom.Vec2D,
+      Rect = toxi.geom.Rect;
+    var physics = new VerletPhysics2D();
+    physics.setDrag(0.5);
+    physics.setWorldBounds(new Rect(0, 0, 1, 1));
+
+    var etherTypeColor = {};
+    etherTypeColor["IPv4"] = [178, 7, 7];
+    etherTypeColor["IPv6"] = [0, 233, 39];
+    etherTypeColor["ARP"] = [44, 166, 255];
+    etherTypeColor["RARP"] = [0, 22, 167];
+    etherTypeColor["PPP"] = [50, 50, 50];
+    etherTypeColor["PPPoE Discovery Stage"] = [100, 100, 100];
+    etherTypeColor["PPPoE Session Stage"] = [150, 150, 150];
+    etherTypeColor["MPLS"] = [222, 100, 0];
+    etherTypeColor["IEEE 802.1Q VLAN-tagged frames"] = [80, 0, 80];
+    etherTypeColor["Appletalk"] = [230, 255, 10];
+    etherTypeColor["unknown"] = [0, 0, 0];
+
+    setColorOfElement("box-IPv4", etherTypeColor["IPv4"]);
+    setColorOfElement("box-IPv6", etherTypeColor["IPv6"]);
+    setColorOfElement("box-ARP", etherTypeColor["ARP"]);
+    setColorOfElement("box-RARP", etherTypeColor["RARP"]);
+    setColorOfElement("box-PPP", etherTypeColor["PPP"]);
+    setColorOfElement("box-PPPoE-Discovery", etherTypeColor["PPPoE Discovery Stage"]);
+    setColorOfElement("box-PPPoE-Session", etherTypeColor["PPPoE Session Stage"]);
+    setColorOfElement("box-MPLS", etherTypeColor["MPLS"]);
+    setColorOfElement("box-VLAN-tagged-frames", etherTypeColor["IEEE 802.1Q VLAN-tagged frames"]);
+    setColorOfElement("box-Appletalk", etherTypeColor["Appletalk"]);
+    setColorOfElement("box-Ether-unknown", etherTypeColor["unknown"]);
+
+    function setColorOfElement(id, color) {
+      document.getElementById(id).style.backgroundColor =
+        "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+    }
+
+    var socket = new WebSocket(
+      ((window.location.protocol === "https:") ? "wss://" : "ws://") +
+      window.location.host + "/ether" + urlQueryStr);
+
+    socket.onmessage = function (event) {
+      var packet = JSON.parse(event.data);
+      if (packet.ethernet) {
+        var srcAddr = packet.ethernet.macSrcAddr;
+        var dstAddr = packet.ethernet.macDstAddr;
+        var etherType = packet.ethernet.etherType;
+        graph.fill(srcAddr, dstAddr, etherType);
+      }
+    };
+
+    function getQueryParameterByName(name) {
+      var url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+  </script>
+</body>
+
+</html>

@@ -26,22 +26,6 @@
 //    window.scrollTo(0, document.body.scrollHeight);
   };
 
-  function getColor(packet) {
-    var colorClass = "color-default";
-    if (packet.ipProtocol && packet.ipProtocol == "UDP") {
-      colorClass = "color-udp";
-    } else if (packet.ipProtocol && packet.ipProtocol == "TCP") {
-      colorClass = "color-tcp";
-    } else if (packet.ipProtocol && packet.ipProtocol == "IGMP") {
-      colorClass = "color-igmp";
-    } else if (packet.ipProtocol && packet.ipProtocol == "ICMPv6") {
-      colorClass = "color-icmpv6";
-    } else if (packet.macType == "ARP") {
-      colorClass = "color-arp";
-    }
-    return colorClass;
-  }
-
   function getQueryParameterByName(name) {
     var url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -51,6 +35,23 @@
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
+
+  function getColor(packet) {
+    var colorClass = "color-default";
+    if (packet.udp) {
+      colorClass = "color-udp";
+    } else if (packet.tcp) {
+      colorClass = "color-tcp";
+    } else if (packet.ip.protocol == "IGMP") {
+      colorClass = "color-igmp";
+    } else if (packet.ip.protocol == "ICMPv6") {
+      colorClass = "color-icmpv6";
+    } else if (packet.arp) {
+      colorClass = "color-arp";
+    }
+    return colorClass;
+  }
+
 
 </script>
 </body>
