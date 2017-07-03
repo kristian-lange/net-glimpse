@@ -1,5 +1,7 @@
 body {
   background-color: rgb(200, 200, 200);
+  padding: 0px;
+  margin: 0px;
 }
 
 ul {
@@ -7,34 +9,29 @@ ul {
   padding-left: 0px;
 }
 
+#canvasContainer {
+  width: 100%;
+}
+
+#defaultCanvas1 {
+  float: right;
+}
+
+#glossaryEther {
+  margin-left: 10px;
+  float: left;
+}
+
+#glossaryIp {
+  padding: 0px;
+  margin: 0px;
+  float: right;
+}
+
 .glossaryBox {
   width: 30px;
   height: 20px;
   border: 1px solid;
   display: inline-block;
-  margin-right: 2px;  
-}
-
-.color-default {
-  background-color: white;
-}
-
-.color-udp {
-  background-color: lightpink;
-}
-
-.color-tcp {
-  background-color: gainsboro;
-}
-
-.color-igmp {
-  background-color: aquamarine;
-}
-
-.color-icmpv6 {
-  background-color: orange;
-}
-
-.color-arp {
-  background-color: skyblue;
+  margin-right: 2px;
 }
