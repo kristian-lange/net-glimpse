@@ -4,7 +4,7 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
-GET     /p5visu                     controllers.Assets.at(path="/public", file="p5visu.html")
+GET     /visu                       controllers.Assets.at(path="/public", file="visu.html")
 GET     /ether                      controllers.HomeController.ether(nif ?= null)
 
 # Map static resources from the /public folder to the /assets URL path
