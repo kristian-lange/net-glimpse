@@ -2,20 +2,17 @@ function Visu(graph, config) {
 
   this.s = function (p) {
 
-    var canvasMargin = 0;
     var paused = false;
 
     p.setup = function () {
       p.resizeCanvas(config.width, config.height);
-      canvasMargin = size * 0.05;
 
-      p.background(200);
-      p.textSize(14);
+      p.background(config.backgroundColor);
+      p.textSize(config.textSize);
     }
 
     p.windowResized = function () {
       p.resizeCanvas(config.width, config.height);
-      canvasMargin = size * 0.05;
     }
 
     p.keyTyped = function () {
@@ -30,7 +27,7 @@ function Visu(graph, config) {
       if (paused) {
         return;
       }
-      p.background(255);
+      p.background(config.backgroundColor);
       drawEdges();
       drawNodes();
     }
@@ -48,7 +45,7 @@ function Visu(graph, config) {
 
     function drawEdge(edge, srcNode, dstNode) {
       var color = edge.color;
-      if (edge.width > 4) {
+      if (edge.width > config.edgeWidth) {
         edge.width--;
       }
       if (edge.weight > 1) {
@@ -56,10 +53,10 @@ function Visu(graph, config) {
       }
       p.strokeWeight(edge.width * edge.weight);
       p.stroke(color[0], color[1], color[2], 150);
-      var x1 = srcNode.particle.x * p.width + canvasMargin;
-      var y1 = srcNode.particle.y * p.height + canvasMargin;
-      var x2 = dstNode.particle.x * p.width + canvasMargin;
-      var y2 = dstNode.particle.y * p.height + canvasMargin;
+      var x1 = srcNode.particle.x * p.width + config.margin;
+      var y1 = srcNode.particle.y * p.height + config.margin;
+      var x2 = dstNode.particle.x * p.width + config.margin;
+      var y2 = dstNode.particle.y * p.height + config.margin;
       drawArrow(x1, y1, x2, y2);
     }
 
@@ -68,22 +65,21 @@ function Visu(graph, config) {
       p.push();
       p.translate(x2, y2);
       p.rotate(p.atan2(x1 - x2, y2 - y1));
-      p.line(0, 0, -7, -30);
-      p.line(0, 0, 7, -30);
+      p.line(0, 0, -config.edgeArrowWidth, -config.edgeArrowLength);
+      p.line(0, 0, config.edgeArrowWidth, -config.edgeArrowLength);
       p.pop();
     }
 
     function drawNodes() {
-      p.stroke(0, 150);
-      p.strokeWeight(2);
+      p.strokeWeight(config.nodeBorder);
       Object.keys(graph.nodes).forEach(function (addr) {
         p.push();
         var node = graph.nodes[addr];
-        p.translate(node.particle.x * p.width + canvasMargin, node.particle.y * p.height + canvasMargin);
+        p.translate(node.particle.x * p.width + config.margin, node.particle.y * p.height + config.margin);
         p.stroke(0, 150);
         p.fill(node.color[0], node.color[1], node.color[2], node.color[3]);
 
-        if (node.width > 20) {
+        if (node.width > config.nodeWidth) {
           node.width--;
         }
         p.ellipse(0, 0, node.width);

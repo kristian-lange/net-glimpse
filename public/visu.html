@@ -8,9 +8,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/addons/p5.dom.min.js"></script>
   <script src="assets/javascripts/toxiclibs.min.js"></script>
+  <script src="assets/config.js"></script>
   <script src="assets/graph.js"></script>
   <script src="assets/p5visu.js"></script>
-  <link rel="stylesheet" media="screen" href="/assets/stylesheets/p5visu.css">
+  <link rel="stylesheet" media="screen" href="/assets/stylesheets/visu.css">
   <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -19,7 +20,7 @@
 
   <div id="canvasContainer"></div>
 
-  <div id="descriptionContainer">
+  <div id="glossaryContainer">
     <div id="glossaryEther">
       <p><b>Ethernet</b></p>
       <ul>
@@ -62,42 +63,25 @@
   </div>
 
   <script>
-    var nif = getQueryParameterByName("nif");
-    var urlQueryStr = (nif) ? "?nif=" + nif : "";
+    window.onload = setCanvasAndGlossarySize;
+    window.onresize = setCanvasAndGlossarySize;
 
-    var size = document.body.clientWidth / 2 - 20;
-    document.getElementById("glossaryEther").style.width = size + "px";
-    document.getElementById("glossaryIp").style.width = size + "px" ;
-
-    // Setup Ethernet
-    var configEther = {
-      'margin': 0.05,
-      'width': size,
-      'height': size
-    };
-    var graphEther = new Graph();
+    // Setup ethernet visualization
+    var graphEther = new Graph(configEther);
     var visuEther = new Visu(graphEther, configEther);
     var p5Ether = new p5(visuEther.s, 'canvasContainer');
 
-    // Setup IP
-    var configIp = {
-      'margin': 0.05,
-      'width': size,
-      'height': size
-    };
-    var graphIp = new Graph();
+    // Setup IP visualization
+    var graphIp = new Graph(configIp);
     var visuIp = new Visu(graphIp, configIp);
     var p5Ip = new p5(visuIp.s, 'canvasContainer');
 
-    window.setInterval(function () {
-      graphEther.removeOldNodesAndEdges();
-      graphIp.removeOldNodesAndEdges();
-    }, 1000);
-
+    // Start WebSocket to get a stream of network package header data
+    var nif = getUrlQueryParameterByName("nif");
+    var urlQueryStr = (nif) ? "?nif=" + nif : "";
     var socket = new WebSocket(
       ((window.location.protocol === "https:") ? "wss://" : "ws://") +
       window.location.host + "/ether" + urlQueryStr);
-
     socket.onmessage = function (event) {
       var packet = JSON.parse(event.data);
       if (packet.ethernet) {
@@ -133,7 +117,7 @@
       graphIp.fill(srcAddr, dstAddr, srcNodeColor, dstNodeColor, edgeColor);
     }
 
-    function getQueryParameterByName(name) {
+    function getUrlQueryParameterByName(name) {
       var url = window.location.href;
       name = name.replace(/[\[\]]/g, "\\$&");
       var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -141,6 +125,34 @@
       if (!results) return null;
       if (!results[2]) return '';
       return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    function setCanvasAndGlossarySize() {
+      var size = getCanvasSize();
+      if (isFullscreen()) {
+        document.getElementById('canvasContainer').style.marginTop = ((window.innerHeight - size) / 2) + "px";
+        document.getElementById('glossaryContainer').style.display = 'none';
+      } else {
+        document.getElementById('canvasContainer').style.marginTop = 0 + "px";
+        document.getElementById("glossaryEther").style.width = size + "px";
+        document.getElementById("glossaryIp").style.width = size + "px";
+        document.getElementById('glossaryContainer').style.display = 'block';
+      }
+      configEther.width = configEther.height = size;
+      configIp.width = configIp.height = size;
+    }
+
+    function isFullscreen() {
+      // This checks for fullscreen. document.addEventListener with 'fullscreenchange' doesn't work yet.
+      return window.outerWidth === screen.width && window.outerHeight === screen.height;
+    }
+
+    function getCanvasSize() {
+      if (isFullscreen()) {
+        return document.body.clientWidth / 2 - 3;
+      } else {
+        return document.body.clientWidth / 2 - 20;
+      }
     }
   </script>
 

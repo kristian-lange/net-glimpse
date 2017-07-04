@@ -1,17 +1,3 @@
-var unknownColor = [0, 0, 0];
-
-var etherTypeColor = {};
-etherTypeColor["IPv4"] = [178, 7, 7];
-etherTypeColor["IPv6"] = [0, 233, 39];
-etherTypeColor["ARP"] = [44, 166, 255];
-etherTypeColor["RARP"] = [0, 22, 167];
-etherTypeColor["PPP"] = [50, 50, 50];
-etherTypeColor["PPPoE Discovery Stage"] = [100, 100, 100];
-etherTypeColor["PPPoE Session Stage"] = [150, 150, 150];
-etherTypeColor["MPLS"] = [222, 100, 0];
-etherTypeColor["IEEE 802.1Q VLAN-tagged frames"] = [80, 0, 80];
-etherTypeColor["Appletalk"] = [230, 255, 10];
-etherTypeColor["unknown"] = unknownColor;
 setColorOfElement("box-IPv4", etherTypeColor["IPv4"]);
 setColorOfElement("box-IPv6", etherTypeColor["IPv6"]);
 setColorOfElement("box-ARP", etherTypeColor["ARP"]);
@@ -24,10 +10,6 @@ setColorOfElement("box-VLAN-tagged-frames", etherTypeColor["IEEE 802.1Q VLAN-tag
 setColorOfElement("box-Appletalk", etherTypeColor["Appletalk"]);
 setColorOfElement("box-Ether-unknown", etherTypeColor["unknown"]);
 
-var ipProtocolColor = {};
-ipProtocolColor["TCP"] = [0, 20, 155];
-ipProtocolColor["UDP"] = [150, 0, 20];
-ipProtocolColor["unknown"] = unknownColor;
 setColorOfElement("box-TCP", ipProtocolColor["TCP"]);
 setColorOfElement("box-UDP", ipProtocolColor["UDP"]);
 setColorOfElement("box-IP-unknown", ipProtocolColor["unknown"]);
