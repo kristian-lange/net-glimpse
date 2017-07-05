@@ -3,7 +3,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET     /                           controllers.Assets.at(path="/public", file="index.html")
 GET     /visu                       controllers.Assets.at(path="/public", file="visu.html")
 GET     /ether                      controllers.HomeController.ether(nif ?= null)
 

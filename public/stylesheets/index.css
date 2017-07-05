@@ -1,0 +1,32 @@
+body {
+  background-color: white;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+.color-default {
+  background-color: white;
+}
+
+.color-udp {
+  background-color: lightpink;
+}
+
+.color-tcp {
+  background-color: gainsboro;
+}
+
+.color-igmp {
+  background-color: aquamarine;
+}
+
+.color-icmpv6 {
+  background-color: orange;
+}
+
+.color-arp {
+  background-color: skyblue;
+}

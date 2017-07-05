@@ -19,17 +19,11 @@ import javax.inject.Singleton;
 @Singleton
 public class HomeController extends Controller {
 
-	private static final ALogger LOGGER = Logger.of(HomeController.class);
-
 	private final PcapInitializer pcapInitializer;
 
 	@Inject
 	public HomeController(PcapInitializer pcapInitializer) {
 		this.pcapInitializer = pcapInitializer;
-	}
-
-	public Result index() {
-		return ok(views.html.index.render());
 	}
 
 	public LegacyWebSocket<JsonNode> ether(String nif) {
