@@ -6,9 +6,10 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/addons/p5.dom.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/addons/p5.dom.min.js"></script>
   <script src="assets/javascripts/toxiclibs.min.js"></script>
   <script src="assets/config.js"></script>
+  <script src="assets/netDataReceiver.js"></script>
   <script src="assets/graph.js"></script>
   <script src="assets/p5visu.js"></script>
   <link rel="stylesheet" media="screen" href="/assets/stylesheets/visu.css">
@@ -22,49 +23,23 @@
 
   <div id="glossaryContainer">
     <div id="glossaryEther">
-      <p><b>Ethernet</b></p>
-      <ul>
-        <li>
-          <div id="box-IPv4" class="glossaryBox"></div>IPv4</li>
-        <li>
-          <div id="box-IPv6" class="glossaryBox"></div>IPv6</li>
-        <li>
-          <div id="box-ARP" class="glossaryBox"></div>ARP</li>
-        <li>
-          <div id="box-RARP" class="glossaryBox"></div>RARP</li>
-        <li>
-          <div id="box-PPP" class="glossaryBox"></div>PPP</li>
-        <li>
-          <div id="box-PPPoE-Discovery" class="glossaryBox"></div>PPPoE Discovery Stage</li>
-        <li>
-          <div id="box-PPPoE-Session" class="glossaryBox"></div>PPPoE Session Stage</li>
-        <li>
-          <div id="box-MPLS" class="glossaryBox"></div>MPLS</li>
-        <li>
-          <div id="box-VLAN-tagged-frames" class="glossaryBox"></div>IEEE 802.1Q VLAN-tagged frames</li>
-        <li>
-          <div id="box-Appletalk" class="glossaryBox"></div>Appletalk</li>
-        <li>
-          <div id="box-Ether-unknown" class="glossaryBox"></div>unknown</li>
-      </ul>
+      <p><b>Ethernet (link color)</b></p>
+      <ul id="glossaryEtherUl"></ul>
     </div>
-
     <div id="glossaryIp">
-      <p><b>IP</b></p>
-      <ul>
-        <li>
-          <div id="box-TCP" class="glossaryBox"></div>TCP</li>
-        <li>
-          <div id="box-UDP" class="glossaryBox"></div>UDP</li>
-        <li>
-          <div id="box-IP-unknown" class="glossaryBox"></div>unknown</li>
-      </ul>
+      <p><b>IP (link color)</b></p>
+      <ul id="glossaryIpUl"></ul>
     </div>
   </div>
 
   <script>
-    window.onload = setCanvasAndGlossarySize;
     window.onresize = setCanvasAndGlossarySize;
+    setCanvasAndGlossarySize();
+
+    var glossaryEtherUl = document.getElementById("glossaryEtherUl");
+    fillGlossary(glossaryEtherUl, etherTypeConfig);
+    var glossaryIpUl = document.getElementById("glossaryIpUl");
+    fillGlossary(glossaryIpUl, ipPacketConfig);
 
     // Setup ethernet visualization
     var graphEther = new Graph(configEther);
@@ -76,56 +51,7 @@
     var visuIp = new Visu(graphIp, configIp);
     var p5Ip = new p5(visuIp.s, 'canvasContainer');
 
-    // Start WebSocket to get a stream of network package header data
-    var nif = getUrlQueryParameterByName("nif");
-    var urlQueryStr = (nif) ? "?nif=" + nif : "";
-    var socket = new WebSocket(
-      ((window.location.protocol === "https:") ? "wss://" : "ws://") +
-      window.location.host + "/ether" + urlQueryStr);
-    socket.onmessage = function (event) {
-      var packet = JSON.parse(event.data);
-      if (packet.ethernet) {
-        handleEther(packet);
-      }
-      if (packet.ip) {
-        handleIp(packet);
-      }
-    };
-
-    function handleEther(packet) {
-      var srcAddr = packet.ethernet.macSrcAddr;
-      var dstAddr = packet.ethernet.macDstAddr;
-      var srcNodeColor = getColorFromMac(srcAddr);
-      var dstNodeColor = getColorFromMac(dstAddr);
-      var edgeColor = getColorFromEtherType(packet.ethernet.etherType);
-      graphEther.fill(srcAddr, dstAddr, srcNodeColor, dstNodeColor, edgeColor);
-    }
-
-    function handleIp(packet) {
-      var srcAddr = packet.ip.srcAddr.substring(1);
-      var dstAddr = packet.ip.dstAddr.substring(1);
-      var protocol = packet.ip.protocol;
-      var srcNodeColor, dstNodeColor;
-      if (packet.ip.version === "IPv4") {
-        srcNodeColor = getColorFromIPv4(srcAddr);
-        dstNodeColor = getColorFromIPv4(dstAddr);
-      } else if (packet.ip.version === "IPv6") {
-        srcNodeColor = getColorFromIPv6(srcAddr);
-        dstNodeColor = getColorFromIPv6(dstAddr);
-      }
-      var edgeColor = getColorFromIpProtocol(packet.ip.protocol);
-      graphIp.fill(srcAddr, dstAddr, srcNodeColor, dstNodeColor, edgeColor);
-    }
-
-    function getUrlQueryParameterByName(name) {
-      var url = window.location.href;
-      name = name.replace(/[\[\]]/g, "\\$&");
-      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
+    netDataReceiver.start();
 
     function setCanvasAndGlossarySize() {
       var size = getCanvasSize();
@@ -134,17 +60,12 @@
         document.getElementById('glossaryContainer').style.display = 'none';
       } else {
         document.getElementById('canvasContainer').style.marginTop = 0 + "px";
+        document.getElementById('glossaryContainer').style.display = 'block';
         document.getElementById("glossaryEther").style.width = size + "px";
         document.getElementById("glossaryIp").style.width = size + "px";
-        document.getElementById('glossaryContainer').style.display = 'block';
       }
-      configEther.width = configEther.height = size;
-      configIp.width = configIp.height = size;
-    }
-
-    function isFullscreen() {
-      // This checks for fullscreen. document.addEventListener with 'fullscreenchange' doesn't work yet.
-      return window.outerWidth === screen.width && window.outerHeight === screen.height;
+      configEther.canvas.width = configEther.canvas.height = size;
+      configIp.canvas.width = configIp.canvas.height = size;
     }
 
     function getCanvasSize() {
@@ -154,9 +75,31 @@
         return document.body.clientWidth / 2 - 20;
       }
     }
+
+    function isFullscreen() {
+      // This checks for fullscreen. document.addEventListener with 'fullscreenchange' doesn't work yet.
+      return window.outerWidth === screen.width && window.outerHeight === screen.height;
+    }
+
+    function fillGlossary(ul, config) {
+      Object.keys(config).forEach(function (key) {
+        var li = document.createElement("li");
+
+        var div = document.createElement("div");
+        div.className = "glossaryBox";
+        var color = config[key].color;
+        div.style.backgroundColor = "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+
+        var span = document.createElement("span");
+        span.innerText = config[key].desc;
+
+        li.appendChild(div);
+        li.appendChild(span);
+        ul.appendChild(li);
+      });
+    }
   </script>
 
-  <script src="assets/color.js"></script>
 </body>
 
 </html>

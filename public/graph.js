@@ -6,24 +6,27 @@ var VerletPhysics2D = toxi.physics2d.VerletPhysics2D,
   Vec2D = toxi.geom.Vec2D,
   Rect = toxi.geom.Rect;
 
+
 function Graph(config) {
 
   var physics = new VerletPhysics2D();
-  physics.setDrag(config.physicsDrag);
-  physics.setWorldBounds(new Rect(0, 0, config.margin / config.width, config.margin / config.height));
+  physics.setDrag(config.physics.drag);
+  var worldBoundX = 1 - 2 * config.canvas.margin / config.canvas.width;
+  var worldBoundY = 1 - 2 * config.canvas.margin / config.canvas.height;
+  physics.setWorldBounds(new Rect(0, 0, worldBoundX , worldBoundY));
 
   this.nodes = {}; // Maps addr to node
   setCleaning(this, config);
 
-  this.fill = function (srcAddr, dstAddr, srcNodeColor, dstNodeColor, edgeColor) {
-    var srcNode = getOrAddNode(this, srcAddr, config);
-    var dstNode = getOrAddNode(this, dstAddr, config);
-    var edge = getOrAddEdge(srcNode, dstNode, config);
+  this.fill = function (para) {
+    var srcNode = getOrAddNode(this, para.srcAddr, config);
+    var dstNode = getOrAddNode(this, para.dstAddr, config);
+    var edge = getOrAddEdge(srcNode, dstNode, para.edgeText, config);
 
     var dateNow = Date.now();
-    srcNode.tick(dateNow, srcNodeColor);
-    dstNode.tick(dateNow, dstNodeColor);
-    edge.tick(edgeColor);
+    srcNode.tick(dateNow, para.srcNodeColor);
+    dstNode.tick(dateNow, para.dstNodeColor);
+    edge.tick(para.edgeColor, para.edgeText);
   }
 
   this.update = function () {
@@ -39,10 +42,10 @@ function Graph(config) {
     return node;
   }
 
-  var getOrAddEdge = function (srcNode, dstNode) {
+  var getOrAddEdge = function (srcNode, dstNode, edgeText, config) {
     var edge = srcNode.edges[dstNode.addr];
     if (!edge) {
-      edge = new Edge(srcNode, dstNode, physics, config);
+      edge = new Edge(srcNode, dstNode, edgeText, physics, config);
       srcNode.edges[dstNode.addr] = edge;
       dstNode.incomingEdges[srcNode.addr] = edge;
     }
@@ -52,17 +55,17 @@ function Graph(config) {
   function setCleaning(graph, config) {
     window.setInterval(function () {
       graph.removeOldNodesAndEdges();
-    }, config.cleaningIntervall);
+    }, config.graph.cleaningIntervall);
   }
 
-  this.removeOldNodesAndEdges = function() {
+  this.removeOldNodesAndEdges = function () {
     var dateNow = Date.now();
 
     var allNodes = this.nodes;
     var oldNodes = [];
     Object.keys(allNodes).forEach(function (addr) {
       var node = allNodes[addr];
-      if ((dateNow - node.lastSeen) > config.nodeAge) {
+      if ((dateNow - node.lastSeen) > config.graph.cleaningAge) {
         oldNodes.push(node);
       }
     });
@@ -106,8 +109,8 @@ function Graph(config) {
 function Node(addr, physics, config) {
 
   this.addr = addr;
-  this.color = [0, 0, 0]; // Set anew in every tick
-  this.width = config.nodeWidth; // Set anew in every tick
+  this.color = [0, 0, 0, 255]; // Set anew in every tick
+  this.width = config.node.width; // Set anew in every tick
   this.edges = {}; // Outgoing edges: maps edge's dst addr to edge
   this.incomingEdges = {}; // Maps edge's src addr to edge
   this.lastSeen = {};
@@ -116,15 +119,18 @@ function Node(addr, physics, config) {
   this.behavior = new AttractionBehavior(
     this.particle,
     0.2, // radius
-    -config.physicsNodeRepulsion,
+    -config.physics.nodeRepulsion,
     0 // jitter
   );
   physics.addBehavior(this.behavior);
 
   this.tick = function (dateNow, color) {
     this.lastSeen = dateNow;
-    this.color = color;
-    this.width = config.nodeWidth;
+    this.color[0] = color[0];
+    this.color[1] = color[1];
+    this.color[2] = color[2];
+    this.color[3] = 255;
+    this.width = config.node.tickWidth;
   }
 
   this.removePhysics = function () {
@@ -138,24 +144,29 @@ function getFloatAroundCenter() {
 }
 
 // Edges are directed from srcNode to dstNode
-function Edge(srcNode, dstNode, physics, config) {
+function Edge(srcNode, dstNode, text, physics, config) {
 
   this.dstNode = dstNode;
-  this.color = [0, 0, 0];
-  this.width = config.edgeWidth;
+  this.color = [0, 0, 0, 255];
+  this.text = text;
+  this.width = config.edge.width;
   this.weight = 1;
 
   this.spring = new VerletSpring2D(
     srcNode.particle,
     dstNode.particle,
-    config.physicsSpringRestLength,
-    config.physicsSpringStrength
+    config.physics.springRestLength,
+    config.physics.springStrength
   );
   physics.addSpring(this.spring);
 
-  this.tick = function (edgeColor) {
-    this.color = edgeColor;
-    this.width = config.edgeWidth;
+  this.tick = function (color, text) {
+    this.color[0] = color[0];
+    this.color[1] = color[1];
+    this.color[2] = color[2];
+    this.color[3] = 255;
+    this.text = text;
+    this.width = config.edge.tickWidth;
     if (this.weight < 10) {
       this.weight += 0.05;
     }
