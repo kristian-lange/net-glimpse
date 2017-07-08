@@ -18,18 +18,21 @@ var configEther = {
   },
   'edge': {
     'width': 4, // Minmum edge line width
+    'weightStep': 0.01, // How much the weight is reduced per frame
+    'tickWidth': 4, // Width after a packet was sent 
+    'tickWeightMax': 7, // line width = width * weight 
+    'tickWeightStep': 0.1, // How much the weight is increased by a tick
     'showText': true,
     'textSize': 12,
-    'tickWidth': 4, // Width after a packet was appeared 
     'arrowLength': 30, // Arrow length of each edge
     'arrowWidth': 7, // Arrow width of each node
     'transparency': 100, // Transparancy in resting state
   },
   'node': {
     'width': 20, // Minumum node circle width
+    'tickWidth': 40, // Widht after a packet was sent
     'showText': true,
     'textSize': 14,
-    'tickWidth': 40, // Minumum node circle width
     'border': 2, // Node border line thickness
     'transparency': 150, // Transparancy in resting state
   }
@@ -55,19 +58,22 @@ var configIp = {
   },
   'edge': {
     'width': 4, // Minmum edge line width
+    'weightStep': 0.01, // How much the weight is reduced per frame
+    'tickWidth': 4, // Width after a packet was sent
+    'tickWeightMax': 7, // line width = width * weight 
+    'tickWeightStep': 0.1, // How much the weight is increased by a tick
     'showText': true,
     'showUnknownPorts': false, // Special for IP packets: Show user and private ports over 1023
     'textSize': 12,
-    'tickWidth': 4, // Width after a packet was appeared 
     'arrowLength': 30, // Arrow length of each edge
     'arrowWidth': 7, // Arrow width of each node
     'transparency': 100 // Transparancy in resting state
   },
   'node': {
     'width': 20, // Minumum node circle width
+    'tickWidth': 40, // Widht after a packet was sent
     'showText': true,
     'textSize': 14,
-    'tickWidth': 40, // Minumum node circle width
     'border': 2, // Node border line thickness
     'transparency': 150, // Transparancy in resting state
   }

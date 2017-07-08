@@ -13,7 +13,7 @@ ul {
   width: 100%;
 }
 
-#defaultCanvas1 {
+canvas:nth-child(2) {
   float: right;
 }
 

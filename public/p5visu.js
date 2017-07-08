@@ -5,7 +5,7 @@ function Visu(graph, config) {
     var paused = false;
 
     p.setup = function () {
-      p.resizeCanvas(config.canvas.width, config.canvas.height);
+      p.createCanvas(config.canvas.width, config.canvas.height);
 
       p.background(config.canvas.backgroundColor);
       p.textAlign(p.CENTER);
@@ -49,7 +49,7 @@ function Visu(graph, config) {
         edge.width--;
       }
       if (edge.weight > 1) {
-        edge.weight -= 0.005;
+        edge.weight -= config.edge.weightStep;
       }
       if (edge.color[3] > config.edge.transparency) {
         edge.color[3] -= 5;
