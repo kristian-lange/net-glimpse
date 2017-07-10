@@ -24,7 +24,7 @@ net-glimps consists of two parts: 1) Visualization of network traffic, and 2) St
 
 1. Run on Linux or Unix/MacOS `./bin/net-glimps`
    
-   You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimps -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimps to IP `172.23.1.81` and port `8080`.
+   You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimps -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimps to IP `172.23.1.81` and port `8080`.
 
 1. Try in a browser, e.g. with `http://localhost:9000/?nif=wlp3s0` for network interface `wlp3s0` to get all raw header data
 
