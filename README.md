@@ -10,7 +10,7 @@ net-glimps has of two parts: 1) Visualization of network traffic, and 2) Streami
 
 * Java, JavaScript
 * Pcap4J (https://github.com/kaitoy/pcap4j) to access network interfaces
-* Play Framework 2.5
+* Play Framework 2.5 and sbt
 * Akka to distribute network interface data to multiple WebSockets
 * Graphics with [p5js](https://p5js.org/) and physics with [toxiclibs](https://github.com/hapticdata/toxiclibsjs)
 
@@ -84,3 +84,8 @@ The data format is JSON. The endpoint `/?nif=myNetworkInterface` just shows the 
 
 * It is possible to **stream different network interfaces in parallel**.
 * It is also possible to **stream the same network interface to multiple destinations**.
+
+
+## Run with sbt
+
+E.g. `sbt -Dhttp.address=172.23.1.81 -Dhttp.port=9000 run`
