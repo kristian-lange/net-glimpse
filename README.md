@@ -17,9 +17,15 @@ net-glimps consists of two independent parts: 1) Streaming of header data from y
 
 1. To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
 
-1. Run
-   `./bin/net-glimps` (Linux or Unix)
-   `./bin/net-glimps.bat` (Windows)
+1. Run with Linux or Unix
+   ```shell
+   ./bin/net-glimps
+   ```
+   
+   Run with Windows
+   ```
+   ./bin/net-glimps.bat
+   ```
 
    You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used.
 
