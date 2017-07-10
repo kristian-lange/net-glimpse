@@ -7,7 +7,7 @@ var configEther = {
     'backgroundColor': 255, // Only shades of gray
   },
   'physics': { // In phsysics are all used as toxiclibs parameters
-    'drag': 0.5,
+    'drag': 1.5,
     'nodeRepulsion': 0.012, // Repulsion between two nodes
     'springRestLength': 0.2, // Spring length in rest between two nodes
     'springStrength': 0.1, // Spring strength between two nodes
@@ -26,7 +26,7 @@ var configEther = {
     'textSize': 12,
     'arrowLength': 30, // Arrow length of each edge
     'arrowWidth': 7, // Arrow width of each node
-    'transparency': 100, // Transparancy in resting state
+    'transparency': 150, // Transparancy in resting state
   },
   'node': {
     'width': 20, // Minumum node circle width
@@ -47,7 +47,7 @@ var configIp = {
     'backgroundColor': 255, // Only shades of gray
   },
   'physics': { // In phsysics are all used as toxiclibs parameters
-    'drag': 0.5,
+    'drag': 1.5,
     'nodeRepulsion': 0.012, // Repulsion between two nodes
     'springRestLength': 0.2, // Spring length in rest between two nodes
     'springStrength': 0.1, // Spring strength between two nodes
@@ -67,7 +67,7 @@ var configIp = {
     'textSize': 12,
     'arrowLength': 30, // Arrow length of each edge
     'arrowWidth': 7, // Arrow width of each node
-    'transparency': 100 // Transparancy in resting state
+    'transparency': 150 // Transparancy in resting state
   },
   'node': {
     'width': 20, // Minumum node circle width

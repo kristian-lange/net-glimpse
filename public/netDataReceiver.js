@@ -8,27 +8,17 @@ var netDataReceiver = {};
     var urlQueryStr = (nif) ? "?nif=" + nif : "";
     var socket = new WebSocket(
       ((window.location.protocol === "https:") ? "wss://" : "ws://") +
-      window.location.host + "/ether" + urlQueryStr);
+      window.location.host + "/netdata" + urlQueryStr);
 
     socket.onmessage = function (event) {
       var packet = JSON.parse(event.data);
-      if (packet.ethernet) {
+      if (packet.ethernet && typeof graphEther !== 'undefined') {
         graphEther.fill(getParameterForEtherVisu(packet));
       }
-      if (packet.ip) {
+      if (packet.ip && typeof graphIp !== 'undefined') {
         graphIp.fill(getParameterForIPVisu(packet));
       }
     }
-  }
-
-  function getUrlQueryParameterByName(name) {
-    var url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-      results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 
   function getParameterForEtherVisu(packet) {

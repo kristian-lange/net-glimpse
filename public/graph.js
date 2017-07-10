@@ -11,9 +11,6 @@ function Graph(config) {
 
   var physics = new VerletPhysics2D();
   physics.setDrag(config.physics.drag);
-  var worldBoundX = 1 - 2 * config.canvas.margin / config.canvas.width;
-  var worldBoundY = 1 - 2 * config.canvas.margin / config.canvas.height;
-  physics.setWorldBounds(new Rect(0, 0, worldBoundX , worldBoundY));
 
   this.nodes = {}; // Maps addr to node
   setCleaning(this, config);
@@ -31,6 +28,17 @@ function Graph(config) {
 
   this.update = function () {
     physics.update();
+  }
+
+  this.getWorldBounds = function () {
+    return physics.getWorldBounds();
+  }
+
+  this.setWorldBounds = function () {
+    // Use the proper width to height ratio to prevent graphics stretching
+    var width = config.canvas.width / config.canvas.height;
+    var height = 1;
+    physics.setWorldBounds(new Rect(0, 0, width, height));
   }
 
   var getOrAddNode = function (graph, addr, config) {
@@ -114,7 +122,9 @@ function Node(addr, physics, config) {
   this.edges = {}; // Outgoing edges: maps edge's dst addr to edge
   this.incomingEdges = {}; // Maps edge's src addr to edge
   this.lastSeen = {};
-  this.particle = new VerletParticle2D(getFloatAroundCenter(), getFloatAroundCenter());
+  this.particle = new VerletParticle2D(
+    getFloatAroundCenter(physics.getWorldBounds().width),
+    getFloatAroundCenter(physics.getWorldBounds().height));
   physics.addParticle(this.particle);
   this.behavior = new AttractionBehavior(
     this.particle,
@@ -139,8 +149,8 @@ function Node(addr, physics, config) {
   }
 }
 
-function getFloatAroundCenter() {
-  return ((Math.random() - 0.5) * 0.1) + 0.5;
+function getFloatAroundCenter(size) {
+  return Math.random() * 0.1 + size / 2;
 }
 
 // Edges are directed from srcNode to dstNode

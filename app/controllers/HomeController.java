@@ -26,7 +26,7 @@ public class HomeController extends Controller {
 		this.pcapInitializer = pcapInitializer;
 	}
 
-	public LegacyWebSocket<JsonNode> ether(String nif) {
+	public LegacyWebSocket<JsonNode> netdata(String nif) {
 		ActorRef pcapDispatcherActorRef = pcapInitializer.getPcapDispatcherActorRef(nif);
 		return WebSocket.withActor(out -> WebSocketActor.props(out,
 				pcapDispatcherActorRef));

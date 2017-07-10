@@ -1,5 +1,4 @@
-name := """ether-visu-web"""
-organization := "com.example"
+name := """net-glimps"""
 
 version := "1.0-SNAPSHOT"
 

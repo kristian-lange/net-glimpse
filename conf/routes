@@ -2,10 +2,11 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
 GET     /                           controllers.Assets.at(path="/public", file="index.html")
-GET     /visu                       controllers.Assets.at(path="/public", file="visu.html")
-GET     /ether                      controllers.HomeController.ether(nif ?= null)
+GET     /glimps                     controllers.Assets.at(path="/public", file="glimps.html")
+GET     /ipglimps                   controllers.Assets.at(path="/public", file="ipglimps.html")
+GET     /etherglimps                controllers.Assets.at(path="/public", file="etherglimps.html")
+GET     /netdata                    controllers.HomeController.netdata(nif ?= null)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

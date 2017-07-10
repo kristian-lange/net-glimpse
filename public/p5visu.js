@@ -2,10 +2,17 @@ function Visu(graph, config) {
 
   this.s = function (p) {
 
+    // Toggles if key 'p' was pressed. If true the graphics stops.
     var paused = false;
+
+    // The correction factors are necessary to calculate the real screen coordinates
+    // from the physics' coordinates. 
+    var correctionX;
+    var correctionY;
 
     p.setup = function () {
       p.createCanvas(config.canvas.width, config.canvas.height);
+      calcCorrectionFactors();
 
       p.background(config.canvas.backgroundColor);
       p.textAlign(p.CENTER);
@@ -13,6 +20,20 @@ function Visu(graph, config) {
 
     p.windowResized = function () {
       p.resizeCanvas(config.canvas.width, config.canvas.height);
+      calcCorrectionFactors();
+    }
+
+    function calcCorrectionFactors() {
+      correctionX = (p.width - config.canvas.margin * 2) / graph.getWorldBounds().width;
+      correctionY = (p.height - config.canvas.margin * 2) / graph.getWorldBounds().height;
+    }
+
+    function calcX(x) {
+      return x * correctionX + config.canvas.margin;
+    }
+
+    function calcY(y) {
+      return y * correctionY + config.canvas.margin;
     }
 
     p.keyTyped = function () {
@@ -90,7 +111,7 @@ function Visu(graph, config) {
       Object.keys(graph.nodes).forEach(function (addr) {
         p.push();
         var node = graph.nodes[addr];
-        p.translate(calcY(node.particle.x), calcY(node.particle.y));
+        p.translate(calcX(node.particle.x), calcY(node.particle.y));
         p.stroke(0, 0, 0, node.color[3]);
         if (node.color[3] > config.node.transparency) {
           node.color[3] -= 5;
@@ -106,14 +127,6 @@ function Visu(graph, config) {
         }
         p.pop();
       });
-    }
-
-    function calcX(x) {
-      return x * p.width + config.canvas.margin;
-    }
-
-    function calcY(y) {
-      return y * p.height + config.canvas.margin;
     }
 
   }
