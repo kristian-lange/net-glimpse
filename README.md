@@ -3,7 +3,8 @@
 net-glimps consists of two independent parts: 1) Streaming of header data from your network interfaces via WebSockets, and 2) Visualization of this network traffic.
 
 TODO why, wireshark
-[screenshot](docs/screenshot.png)
+
+![screenshot](docs/screenshot.png)
 
 ### Using
 
