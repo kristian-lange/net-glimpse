@@ -82,7 +82,7 @@ or more general with secure WebSockets and assuming net-glimps runs on the same 
 ```javascript
 var socket = new WebSocket(
       ((window.location.protocol === "https:") ? "wss://" : "ws://") +
-      window.location.host + "/netdata/?nif=wlp3s0);
+      window.location.host + "/netdata/?nif=wlp3s0");
 ```
 
 * It is possible to **stream different network interfaces in parallel**.
