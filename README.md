@@ -64,7 +64,7 @@ Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can 
 
 ## Streaming of header data from your network interfaces via WebSockets
 
-If you just want to get the header data you have to open a WebSocket with the URL `/netdata` and the network interface you want to intercept has to be specified in the query string with the parameter 'nif'.
+If you just want to get the header data without the visualization you have to open a WebSocket with the URL `/netdata` and the network interface you want to intercept has to be specified in the query string with the parameter 'nif'.
 
 E.g. in JavaScript (browser) to get traffic from the network interface 'wlp3s0' one could write
 
