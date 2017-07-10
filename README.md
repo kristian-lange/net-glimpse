@@ -85,7 +85,3 @@ The data format is JSON. The endpoint `/?nif=myNetworkInterface` just shows the 
 * It is possible to **stream different network interfaces in parallel**.
 * It is also possible to **stream the same network interface to multiple destinations**.
 
-
-## Run with sbt
-
-E.g. `sbt -Dhttp.address=172.23.1.81 -Dhttp.port=9000 run`
