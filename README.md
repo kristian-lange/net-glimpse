@@ -42,6 +42,8 @@ TODO why, wireshark
 
 E.g. `http://localhost:9000/glimps?nif=wlp3s0` shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
 
+You can open multiple pages of the same or different network interface(s) at the same time.
+
 ### Visualization Details 
 
 * Nodes represent MAC or IP addresses
@@ -54,11 +56,11 @@ E.g. `http://localhost:9000/glimps?nif=wlp3s0` shows a visualization of the Ethe
 * If EtherType or port is one of the well known ones it's annotated at the edge (scroll down to see a glossary)
 * Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the config)
 * Nodes and edges get removed after a while if no packets are sent (default is 10 s)
-* In fullscreen mode the whole screen is used
+* In fullscreen mode the whole screen is used for the graph(s)
 
 ### Configuration
 
-Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimps.conf`. Have a look they are commented.
+Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimps.conf`. Have a look they have comments.
 
 
 ## Streaming of header data from your network interfaces via WebSockets
