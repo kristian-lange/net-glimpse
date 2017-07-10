@@ -1,13 +1,29 @@
 # net-glimps
 
-net-glimps consists of two independent parts: 1) Streaming of data from your network interfaces via WebSockets, and 2) Visualization of this network traffic (this, I call 'glimps').
+net-glimps consists of two independent parts: 1) Streaming of header data from your network interfaces via WebSockets, and 2) Visualization of this network traffic (this, I call 'glimps').
 
 ## How to run
 
-[Download](net-glimps/releases), unzip and start with ./bin/net-glimps (Linux or Unix) or ./bin/net-glimps.bat (Windows).
+[Download](https://github.com/kristian-lange/net-glimps/releases), unzip and run with ./bin/net-glimps (Linux or Unix) or ./bin/net-glimps.bat (Windows).
 
+## Streaming of header data from your network interfaces via WebSockets
 
-## Streaming of data from your network interfaces via WebSockets
+To get the header data you have to open a WebSocket with the URL `/netdata`. The network interface you want to intercept has to be specified in the query string with the parameter 'nif'.
+
+E.g. in JavaScript to get traffic from the network interface 'wlp3s0' one could write
+
+```javascript
+var socket = new WebSocket(ws://myhost/netdata/?nif=wlp3s0);
+```
+
+or more general with secure WebSockets and assuming net-glimps runs on the same host as your JavaScript is served.
+
+```javascript
+var socket = new WebSocket(
+      ((window.location.protocol === "https:") ? "wss://" : "ws://") +
+      window.location.host + "/netdata" + urlQueryStr);
+```
+
 
 Streaming of data from your local network interfaces via WebSockets. The WebSockets can be consumed by e.g. a browser.
 * It is possible to stream _different_ network interfaces in parallel.
