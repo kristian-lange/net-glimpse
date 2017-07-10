@@ -1,12 +1,12 @@
 # net-glimps
 
-net-glimps consists of two independent parts: 1) Streaming of header data from your network interfaces via WebSockets, and 2) Visualization of this network traffic.
+I wanted to have a little tool that can give me a quick overview on what's going in my network. Tools like Wireshark are great but don't give you this 'glimps'. 
 
-TODO why, wireshark
+net-glimps consists of two parts: 1) Visualization of network traffic, and 2) Streaming of header data from your network interfaces via WebSockets.
 
 ![screenshot](docs/screenshot1.png)
 
-### Using
+### Used technologies
 
 * Java, JavaScript
 * Pcap4J (https://github.com/kaitoy/pcap4j) to access network interfaces
@@ -71,7 +71,7 @@ Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can 
 
 If you just want to get the header data you have to open a WebSocket with the URL `/netdata` and the network interface you want to intercept has to be specified in the query string with the parameter 'nif'.
 
-E.g. in JavaScript to get traffic from the network interface 'wlp3s0' one could write
+E.g. in JavaScript (browser) to get traffic from the network interface 'wlp3s0' one could write
 
 ```javascript
 var socket = new WebSocket(ws://myhost/netdata/?nif=wlp3s0);
