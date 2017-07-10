@@ -19,15 +19,15 @@ net-glimps consists of two independent parts: 1) Streaming of header data from y
 
 1. Run with Linux or Unix
 
-   ```shell
+   ```shell
    ./bin/net-glimps
-   ```
+   ```
    
    Run with Windows
    
-   ```
+   ```shell
    ./bin/net-glimps.bat
-   ```
+   ```
 
    You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used.
 
