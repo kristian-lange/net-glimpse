@@ -2,9 +2,26 @@
 
 net-glimps consists of two independent parts: 1) Streaming of header data from your network interfaces via WebSockets, and 2) Visualization of this network traffic (this, I call 'glimps').
 
+### Using
+
+* Pcap4J (https://github.com/kaitoy/pcap4j) to access network interfaces
+* Play Framework 2.5
+* Akka to distribute network interface data to multiple WebSockets
+* Graphics with [p5js](https://p5js.org/) and physics with [toxiclibs](https://github.com/hapticdata/toxiclibsjs)
+
 ## How to run
 
 [Download](https://github.com/kristian-lange/net-glimps/releases), unzip and run with ./bin/net-glimps (Linux or Unix) or ./bin/net-glimps.bat (Windows).
+
+To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
+
+You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used.
+
+Example:
+
+```shell
+./bin/net-glimps -Dhttp.address=172.23.1.81 -Dhttp.port=9000
+```
 
 ## Streaming of header data from your network interfaces via WebSockets
 
@@ -21,36 +38,19 @@ or more general with secure WebSockets and assuming net-glimps runs on the same 
 ```javascript
 var socket = new WebSocket(
       ((window.location.protocol === "https:") ? "wss://" : "ws://") +
-      window.location.host + "/netdata" + urlQueryStr);
+      window.location.host + "/netdata/?nif=wlp3s0);
 ```
 
+* It is possible to **stream different network interfaces in parallel**.
+* It is also possible to **stream the same network interface to multiple destinations**.
 
-Streaming of data from your local network interfaces via WebSockets. The WebSockets can be consumed by e.g. a browser.
-* It is possible to stream _different_ network interfaces in parallel.
-* It is also possible to stream the _same_ network interface to multiple destinations.
+
 
 ![Schema](docs/schema.png)
 
-### Using
-* Pcap4J (https://github.com/kaitoy/pcap4j)
-* Play Framework 2.5
-* Akka
 
 
 
-
-
-### Run with sbt
-
-
-
-To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
-
-Start EtherVisuWeb with
-
-    sbt -DNIF=wlp2s0 -Dhttp.address=172.23.1.81 -Dhttp.port=9000 run
-
-All `-D` parameters are optional. `-DNIF` specifies the default network interface. 
 
 ### Try out in your browser
 
