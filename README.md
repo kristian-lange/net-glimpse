@@ -18,7 +18,7 @@ net-glimps has of two parts: 1) Visualization of network traffic, and 2) Streami
 
 To run net-glimps **Java** must be installed.
 
-1. [Download the latest net-glimps-x.x.zip](https://github.com/kristian-lange/net-glimps/releases)
+1. [Download the net-glimps-x.x.zip](https://github.com/kristian-lange/net-glimps/releases)
 
 1. Unzip
 
