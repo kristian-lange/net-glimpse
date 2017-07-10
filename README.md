@@ -2,6 +2,8 @@
 
 net-glimps consists of two independent parts: 1) Streaming of header data from your network interfaces via WebSockets, and 2) Visualization of this network traffic.
 
+TODO why, wireshark
+
 ### Using
 
 * Pcap4J (https://github.com/kaitoy/pcap4j) to access network interfaces
@@ -37,6 +39,25 @@ net-glimps consists of two independent parts: 1) Streaming of header data from y
 
 E.g. `http://localhost:9000/glimps?nif=wlp3s0` shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
 
+### Visualization Details 
+
+* Nodes represent MAC or IP addresses
+* Node colors are determined by the MAC or IP address
+* Nodes blink when a new packet is sent
+* Edges represent sent packets
+* The arrow shows the direction of the sent packet
+* The edges get thicker the more packets are send
+* Edge colors are determined by the EtherType (Ethernet) or TCP/UDP port (Internet) (scroll down to see a glossary)
+* If EtherType or port is one of the well known ones it's annotated at the edge (scroll down to see a glossary)
+* Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the config)
+* Nodes and edges get removed after a while if no packets are sent (default is 10 s)
+* In fullscreen mode the whole screen is used
+
+### Configuration
+
+Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimps.conf`. Have a look they are commented.
+
+
 ## Streaming of header data from your network interfaces via WebSockets
 
 To get the header data you have to open a WebSocket with the URL `/netdata`. The network interface you want to intercept has to be specified in the query string with the parameter 'nif'.
@@ -64,7 +85,7 @@ var socket = new WebSocket(
 
 
 
-
+/?nif try out
 
 ### Try out in your browser
 
