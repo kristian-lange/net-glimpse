@@ -4,7 +4,7 @@ net-glimps consists of two independent parts: 1) Streaming of header data from y
 
 TODO why, wireshark
 
-![screenshot](docs/screenshot.png)
+![screenshot](docs/screenshot1.png)
 
 ### Using
 
