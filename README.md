@@ -1,4 +1,13 @@
-# EtherVisuWeb
+# net-glimps
+
+net-glimps consists of two independent parts: 1) Streaming of data from your network interfaces via WebSockets, and 2) Visualization of this network traffic (this, I call 'glimps').
+
+## How to run
+
+[Download](releases), unzip and start with ./bin/net-glimps (Linux or Unix) or ./bin/net-glimps.bat (Windows).
+
+
+## Streaming of data from your network interfaces via WebSockets
 
 Streaming of data from your local network interfaces via WebSockets. The WebSockets can be consumed by e.g. a browser.
 * It is possible to stream _different_ network interfaces in parallel.
@@ -6,12 +15,18 @@ Streaming of data from your local network interfaces via WebSockets. The WebSock
 
 ![Schema](docs/schema.png)
 
-### Developed with
+### Using
 * Pcap4J (https://github.com/kaitoy/pcap4j)
 * Play Framework 2.5
 * Akka
 
+
+
+
+
 ### Run with sbt
+
+
 
 To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
 
