@@ -1,25 +1,93 @@
-# EtherVisuWeb
+# net-glimps
 
-Streaming of data from your local network interfaces via WebSockets. The WebSockets can be consumed by e.g. a browser.
-* It is possible to stream _different_ network interfaces in parallel.
-* It is also possible to stream the _same_ network interface to multiple destinations.
+net-glimps consists of two independent parts: 1) Streaming of header data from your network interfaces via WebSockets, and 2) Visualization of this network traffic.
+
+TODO why, wireshark
+TODO video
+
+### Using
+
+* Java, JavaScript
+* Pcap4J (https://github.com/kaitoy/pcap4j) to access network interfaces
+* Play Framework 2.5
+* Akka to distribute network interface data to multiple WebSockets
+* Graphics with [p5js](https://p5js.org/) and physics with [toxiclibs](https://github.com/hapticdata/toxiclibsjs)
+
+## How to run
+
+1. [Download](https://github.com/kristian-lange/net-glimps/releases)
+
+1. Unzip
+
+1. To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
+
+1. Run on Linux or Unix `./bin/net-glimps` or on Windows `.\bin\net-glimps.bat`
+   
+   You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used.
+
+   Example:
+
+   ```shell
+   ./bin/net-glimps -Dhttp.address=172.23.1.81 -Dhttp.port=8080
+   ```
+   
+## Visualization of network traffic
+
+1. `/glimps?nif=myNetworkInterface` - shows both, Ethernet and Internet
+   
+2. `/ipglimps?nif=myNetworkInterface` - shows only Internet
+   
+3. `/etherglimps?nif=myNetworkInterface` - shows only Ethernet
+
+E.g. `http://localhost:9000/glimps?nif=wlp3s0` shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
+
+### Visualization Details 
+
+* Nodes represent MAC or IP addresses
+* Node colors are determined by the MAC or IP address
+* Nodes blink when a new packet is sent
+* Edges represent sent packets
+* The arrow shows the direction of the sent packet
+* The edges get thicker the more packets are send
+* Edge colors are determined by the EtherType (Ethernet) or TCP/UDP port (Internet) (scroll down to see a glossary)
+* If EtherType or port is one of the well known ones it's annotated at the edge (scroll down to see a glossary)
+* Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the config)
+* Nodes and edges get removed after a while if no packets are sent (default is 10 s)
+* In fullscreen mode the whole screen is used
+
+### Configuration
+
+Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimps.conf`. Have a look they are commented.
+
+
+## Streaming of header data from your network interfaces via WebSockets
+
+To get the header data you have to open a WebSocket with the URL `/netdata`. The network interface you want to intercept has to be specified in the query string with the parameter 'nif'.
+
+E.g. in JavaScript to get traffic from the network interface 'wlp3s0' one could write
+
+```javascript
+var socket = new WebSocket(ws://myhost/netdata/?nif=wlp3s0);
+```
+
+or more general with secure WebSockets and assuming net-glimps runs on the same host as your JavaScript is served.
+
+```javascript
+var socket = new WebSocket(
+      ((window.location.protocol === "https:") ? "wss://" : "ws://") +
+      window.location.host + "/netdata/?nif=wlp3s0);
+```
+
+* It is possible to **stream different network interfaces in parallel**.
+* It is also possible to **stream the same network interface to multiple destinations**.
+
+
 
 ![Schema](docs/schema.png)
 
-### Developed with
-* Pcap4J (https://github.com/kaitoy/pcap4j)
-* Play Framework 2.5
-* Akka
 
-### Run with sbt
 
-To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
-
-Start EtherVisuWeb with
-
-    sbt -DNIF=wlp2s0 -Dhttp.address=172.23.1.81 -Dhttp.port=9000 run
-
-All `-D` parameters are optional. `-DNIF` specifies the default network interface. 
+/?nif try out
 
 ### Try out in your browser
 
