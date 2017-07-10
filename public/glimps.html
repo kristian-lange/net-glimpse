@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>EtherVisuWeb</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/addons/p5.dom.min.js"></script>
+  <script src="assets/javascripts/toxiclibs.min.js"></script>
+  <script src="assets/config.js"></script>
+  <script src="assets/utils.js"></script>
+  <script src="assets/netDataReceiver.js"></script>
+  <script src="assets/graph.js"></script>
+  <script src="assets/p5visu.js"></script>
+  <link rel="stylesheet" media="screen" href="/assets/stylesheets/visu.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <div id="canvasContainer"></div>
+
+  <div id="glossaryContainer">
+    <div id="glossaryEther">
+      <p><b>Ethernet (link color)</b></p>
+      <ul id="glossaryEtherUl"></ul>
+    </div>
+    <div id="glossaryIp">
+      <p><b>IP (link color)</b></p>
+      <ul id="glossaryIpUl"></ul>
+    </div>
+  </div>
+
+  <script>
+    var graphEther = new Graph(configEther);
+    var graphIp = new Graph(configIp);
+
+    // Order important (not sure why): first graph, then canvas sizing, then visualization and data receiving
+    setTwinCanvasSize(configEther, configIp, graphEther, graphIp);
+    window.onresize = function () {
+      setTwinCanvasSize(configEther, configIp, graphEther, graphIp);
+    };
+
+    var visuEther = new Visu(graphEther, configEther);
+    var visuIp = new Visu(graphIp, configIp);
+    var p5Ether = new p5(visuEther.s, 'canvasContainer');
+    var p5Ip = new p5(visuIp.s, 'canvasContainer');
+    netDataReceiver.start();
+
+    var glossaryEtherUl = document.getElementById("glossaryEtherUl");
+    fillGlossary(glossaryEtherUl, etherTypeConfig);
+    var glossaryIpUl = document.getElementById("glossaryIpUl");
+    fillGlossary(glossaryIpUl, ipPacketConfig);
+  </script>
+
+</body>
+
+</html>
