@@ -39,7 +39,7 @@ net-glimps consists of two parts: 1) Visualization of network traffic, and 2) St
 
 1. `/?nif=myNetworkInterface` - shows raw packet header data
 
-E.g. [[`http://localhost:9000/glimps?nif=wlp3s0`]] shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
+E.g. [`http://localhost:9000/glimps?nif=wlp3s0`](http://localhost:9000/glimps?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
 
 You can open multiple pages of the same or different network interface(s) at the same time.
 
