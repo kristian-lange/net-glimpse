@@ -23,8 +23,8 @@ net-glimps consists of two independent parts: 1) Streaming of header data from y
    ./bin/net-glimps
    ```
    
-   Run with Windows
-
+   or with Windows
+   
    ```shell
    ./bin/net-glimps.bat
    ```
