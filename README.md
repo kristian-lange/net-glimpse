@@ -1,6 +1,6 @@
 # net-glimps
 
-net-glimps consists of two independent parts: 1) Streaming of header data from your network interfaces via WebSockets, and 2) Visualization of this network traffic (this, I call 'glimps').
+net-glimps consists of two independent parts: 1) Streaming of header data from your network interfaces via WebSockets, and 2) Visualization of this network traffic.
 
 ### Using
 
@@ -17,25 +17,26 @@ net-glimps consists of two independent parts: 1) Streaming of header data from y
 
 1. To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
 
-1. Run with Linux or Unix
-
-   ```shell
-   ./bin/net-glimps
-   ```
-   
-   or with Windows
-   
-   ```shell
-   ./bin/net-glimps.bat
-   ```
+1. Run on Linux or Unix `./bin/net-glimps` or on Windows `.\bin\net-glimps.bat`
    
    You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used.
 
    Example:
 
    ```shell
-   ./bin/net-glimps -Dhttp.address=172.23.1.81 -Dhttp.port=9000
+   ./bin/net-glimps -Dhttp.address=172.23.1.81 -Dhttp.port=8080
    ```
+   
+## Visualization of network traffic
+
+1. `http://localhost:9000/glimps?nif=wlp3s0`
+   Shows both, Ethernet and Internet
+   
+2. `http://localhost:9000/ipglimps?nif=wlp3s0`
+   Shows only Internet
+   
+3. `http://localhost:9000/etherglimps?nif=wlp3s0`
+   Shows only Ethernet
 
 ## Streaming of header data from your network interfaces via WebSockets
 
