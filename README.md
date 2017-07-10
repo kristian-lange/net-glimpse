@@ -29,14 +29,13 @@ net-glimps consists of two independent parts: 1) Streaming of header data from y
    
 ## Visualization of network traffic
 
-1. `http://localhost:9000/glimps?nif=wlp3s0`
-   Shows both, Ethernet and Internet
+1. `/glimps?nif=myNetworkInterface` - shows both, Ethernet and Internet
    
-2. `http://localhost:9000/ipglimps?nif=wlp3s0`
-   Shows only Internet
+2. `/ipglimps?nif=myNetworkInterface` - shows only Internet
    
-3. `http://localhost:9000/etherglimps?nif=wlp3s0`
-   Shows only Ethernet
+3. `/etherglimps?nif=myNetworkInterface` - shows only Ethernet
+
+E.g. `http://localhost:9000/glimps?nif=wlp3s0` shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
 
 ## Streaming of header data from your network interfaces via WebSockets
 
