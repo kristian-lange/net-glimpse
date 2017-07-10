@@ -37,7 +37,7 @@ net-glimps consists of two parts: 1) Visualization of network traffic, and 2) St
    
 1. `/etherglimps?nif=myNetworkInterface` - shows only Ethernet
 
-1. `/?nif=myNetworkInterface` - shows raw packet header data
+1. `/?nif=myNetworkInterface` - shows raw packet header data in JSON
 
 E.g. [`http://localhost:9000/glimps?nif=wlp3s0`](http://localhost:9000/glimps?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
 
@@ -66,7 +66,7 @@ Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can 
 
 If you just want to get the header data without the visualization you have to open a WebSocket with the URL `/netdata` and the network interface you want to intercept has to be specified in the query string with the parameter 'nif'.
 
-E.g. in JavaScript (browser) to get traffic from the network interface 'wlp3s0' one could write
+E.g. in JavaScript (browser) to get traffic from the network interface `wlp3s0` one could write
 
 ```javascript
 var socket = new WebSocket(ws://myhost/netdata/?nif=wlp3s0);
