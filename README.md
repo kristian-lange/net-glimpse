@@ -4,7 +4,7 @@ net-glimps consists of two independent parts: 1) Streaming of data from your net
 
 ## How to run
 
-[Download](releases), unzip and start with ./bin/net-glimps (Linux or Unix) or ./bin/net-glimps.bat (Windows).
+[Download](net-glimps/releases), unzip and start with ./bin/net-glimps (Linux or Unix) or ./bin/net-glimps.bat (Windows).
 
 
 ## Streaming of data from your network interfaces via WebSockets
