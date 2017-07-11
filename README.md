@@ -4,7 +4,7 @@ I wanted to have a little tool that can give me a quick overview on what's going
 
 net-glimps has two parts: 1) Visualization of network traffic, and 2) Streaming of header data from your network interfaces via WebSockets.
 
-![screenshot](docs/screenshot1.png)
+![screenshot](docs/screenshot3.png)
 
 ### Used technologies
 
@@ -62,6 +62,8 @@ You can open multiple pages of the same or different network interface(s) at the
 ### Configuration
 
 Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimps.conf`. Have a look they have comments.
+
+![screenshot](docs/screenshot2.png)
 
 
 ## Streaming of header data from your network interfaces via WebSockets
