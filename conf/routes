@@ -3,12 +3,12 @@
 # ~~~~
 
 GET     /                           controllers.Assets.at(path="/public", file="index.html")
-GET     /glimps                     controllers.Assets.at(path="/public", file="glimps.html")
-GET     /ipglimps                   controllers.Assets.at(path="/public", file="ipglimps.html")
-GET     /etherglimps                controllers.Assets.at(path="/public", file="etherglimps.html")
+GET     /glimpse                    controllers.Assets.at(path="/public", file="glimpse.html")
+GET     /ipglimpse                  controllers.Assets.at(path="/public", file="ipglimpse.html")
+GET     /etherglimpse               controllers.Assets.at(path="/public", file="etherglimpse.html")
 GET     /netdata                    controllers.HomeController.netdata(nif ?= null)
 
-GET     /assets/glimps.conf         controllers.ExtAssets.at(filePath="conf/glimps.conf")
+GET     /assets/glimpse.conf        controllers.ExtAssets.at(filePath="conf/glimpse.conf")
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

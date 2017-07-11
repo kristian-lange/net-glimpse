@@ -1,4 +1,4 @@
-name := """net-glimps"""
+name := """net-glimpse"""
 
 version := "1.0"
 
