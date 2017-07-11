@@ -2,6 +2,9 @@
 
 I wanted to have a little tool that can give me a quick overview on what's going in my network. Tools like [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimps'. 
 
+<object style="width:100%;height:100%;width: 820px; height: 461.25px; float: none; clear: both; margin: 2px auto;" data="https://youtu.be/-ICbIZWSxSQ">
+</object>
+
 net-glimps has two parts: 1) Visualization of network traffic, and 2) Streaming of header data from your network interfaces via WebSockets.
 
 ![screenshot](docs/screenshot1.png)
