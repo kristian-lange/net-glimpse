@@ -32,6 +32,7 @@ To run net-glimpse **Java** must be installed.
 
 1. Try in a browser, e.g. with `http://localhost:9000/?nif=wlp3s0` for network interface `wlp3s0` to get all raw header data
 
+You can stop the program with `Ctrl+C`.
 
 ## Visualization of network traffic
 
