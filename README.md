@@ -18,7 +18,7 @@ net-glimpse has two parts: 1) Visualization of network traffic, and 2) Streaming
 
 ## How to run
 
-To run net-glimpse **Java** must be installed.
+To run net-glimpse **Java 8** must be installed.
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
@@ -30,19 +30,19 @@ To run net-glimpse **Java** must be installed.
    
    You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimpse -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimpse to IP `172.23.1.81` and port `8080`.
 
-1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (use the name of your network interface) - it should show you raw packet header data in JSON format
+1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (use the name of the network interface you want to intercept) - it should show you raw packet header data in JSON format
 
 If you are done with net-glimpse you can stop it with `Ctrl+C`.
 
 ## Visualization of network traffic
 
-1. `/glimpse?nif=myNetworkInterface` - shows both, Ethernet and Internet
+1. `http://localhost:9000/glimpse?nif=myNetworkInterface` - shows both, Ethernet and Internet
    
-1. `/ipglimpse?nif=myNetworkInterface` - shows only Internet
+1. `http://localhost:9000/ipglimpse?nif=myNetworkInterface` - shows only Internet
    
-1. `/etherglimpse?nif=myNetworkInterface` - shows only Ethernet
+1. `http://localhost:9000/etherglimpse?nif=myNetworkInterface` - shows only Ethernet
 
-1. `/?nif=myNetworkInterface` - shows raw packet header data in JSON
+1. `http://localhost:9000/?nif=myNetworkInterface` - shows raw packet header data in JSON
 
 E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
 
