@@ -1,8 +1,6 @@
 # net-glimps
 
-I wanted to have a little tool that can give me a quick overview on what's going in my network. Tools like [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimps'.
-
-Have a look at [this video](https://youtu.be/-ICbIZWSxSQ).
+I wanted to have a little tool that can give me a quick overview on what's going in my network. Tools like [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimps'. **Have a look at [this video](https://youtu.be/-ICbIZWSxSQ).**
 
 net-glimps has two parts: 1) Visualization of network traffic, and 2) Streaming of header data from your network interfaces via WebSockets.
 
