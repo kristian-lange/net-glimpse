@@ -54,16 +54,16 @@ You can open multiple pages of the same or different network interface(s) at the
 * Nodes blink when a new packet is sent
 * Edges represent sent packets
 * The arrow shows the direction of the sent packet
-* The edges get thicker the more packets are send
+* The edges get thicker the more packets are sent
 * Edge colors are determined by the EtherType (Ethernet) or TCP/UDP port (Internet) (scroll down to see a glossary)
 * If EtherType or port is one of the well known ones it's annotated at the edge (scroll down to see a glossary)
-* Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the config)
+* Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the configuration)
 * Nodes and edges get removed after a while if no packets are sent (default is 10 s)
 * In fullscreen mode the whole screen is used for the graph(s)
 
 ### Configuration
 
-Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimpse.conf`. Have a look they have comments.
+Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
 
 ![screenshot](docs/screenshot2.png)
 
@@ -78,7 +78,7 @@ E.g. in JavaScript (browser) to get traffic from the network interface `wlp3s0` 
 var socket = new WebSocket(ws://myhost/netdata/?nif=wlp3s0);
 ```
 
-or more general with secure WebSockets and assuming net-glimpse runs on the same host as your JavaScript is served.
+or more generally with secure WebSockets and assuming net-glimpse runs on the same host as your JavaScript is served.
 
 ```javascript
 var socket = new WebSocket(
