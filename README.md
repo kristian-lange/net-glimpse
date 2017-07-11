@@ -24,7 +24,7 @@ To run net-glimpse **Java** must be installed.
 
 1. Unzip
 
-1. To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
+1. To access network interfaces you have to start the program either as **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
 
 1. Run on Linux or Unix/MacOS `./bin/net-glimpse`
    
