@@ -16,14 +16,13 @@
 
   var socket = new WebSocket(
 			((window.location.protocol === "https:") ? "wss://" : "ws://") +
-			window.location.host + "/ether" + urlQueryStr);
+			window.location.host + "/netdata" + urlQueryStr);
 
   socket.onmessage = function (event) {
     var packet = JSON.parse(event.data);
     var packetStr = JSON.stringify(packet, null, 4);
     var colorClass =getColor(packet);
     $('ul').append('<li class="' + colorClass + '"><code><pre>' + packetStr + '</pre></code></li>');
-//    window.scrollTo(0, document.body.scrollHeight);
   };
 
   function getQueryParameterByName(name) {
