@@ -30,7 +30,7 @@ To run net-glimpse **Java 8** must be installed.
    
    You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimpse -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimpse to IP `172.23.1.81` and port `8080`.
 
-1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (use the name of the network interface you want to intercept) - it should show you raw packet header data in JSON format
+1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (instead of `myNetworkInterface` use the name of the network interface you want to intercept) - it should show you raw packet header data in JSON format
 
 If you are done with net-glimpse you can stop it with `Ctrl+C`.
 
