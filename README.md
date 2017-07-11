@@ -1,10 +1,12 @@
-# net-glimps
+# net-glimpse
 
-I wanted to have a little tool that can give me a quick overview on what's going in my network. Tools like [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimps'. 
+I wanted to have a little tool that can gives me a quick overview on what's going in my network, displaying it in the browser. Tools like [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
 
-net-glimps has of two parts: 1) Visualization of network traffic, and 2) Streaming of header data from your network interfaces via WebSockets.
+net-glimpse has two parts: 1) Visualization of network traffic, and 2) Streaming of header data from your network interfaces via WebSockets.
 
-![screenshot](docs/screenshot1.png)
+**Have a look at [this video](https://youtu.be/-ICbIZWSxSQ).**
+
+![screenshot](docs/screenshot3.png)
 
 ### Used technologies
 
@@ -16,30 +18,32 @@ net-glimps has of two parts: 1) Visualization of network traffic, and 2) Streami
 
 ## How to run
 
-1. [Download](https://github.com/kristian-lange/net-glimps/releases)
+To run net-glimpse **Java** must be installed.
+
+1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
 1. Unzip
 
-1. To access network interfaces you have to start the program either with **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
+1. To access network interfaces you have to start the program either as **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
 
-1. Run on Linux or Unix/MacOS `./bin/net-glimps`
+1. Run on Linux or Unix/MacOS `./bin/net-glimpse`
    
-   You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimps -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimps to IP `172.23.1.81` and port `8080`.
+   You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimpse -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimpse to IP `172.23.1.81` and port `8080`.
 
 1. Try in a browser, e.g. with `http://localhost:9000/?nif=wlp3s0` for network interface `wlp3s0` to get all raw header data
 
 
 ## Visualization of network traffic
 
-1. `/glimps?nif=myNetworkInterface` - shows both, Ethernet and Internet
+1. `/glimpse?nif=myNetworkInterface` - shows both, Ethernet and Internet
    
-1. `/ipglimps?nif=myNetworkInterface` - shows only Internet
+1. `/ipglimpse?nif=myNetworkInterface` - shows only Internet
    
-1. `/etherglimps?nif=myNetworkInterface` - shows only Ethernet
+1. `/etherglimpse?nif=myNetworkInterface` - shows only Ethernet
 
 1. `/?nif=myNetworkInterface` - shows raw packet header data in JSON
 
-E.g. [`http://localhost:9000/glimps?nif=wlp3s0`](http://localhost:9000/glimps?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
+E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
 
 You can open multiple pages of the same or different network interface(s) at the same time.
 
@@ -50,16 +54,18 @@ You can open multiple pages of the same or different network interface(s) at the
 * Nodes blink when a new packet is sent
 * Edges represent sent packets
 * The arrow shows the direction of the sent packet
-* The edges get thicker the more packets are send
+* The edges get thicker the more packets are sent
 * Edge colors are determined by the EtherType (Ethernet) or TCP/UDP port (Internet) (scroll down to see a glossary)
 * If EtherType or port is one of the well known ones it's annotated at the edge (scroll down to see a glossary)
-* Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the config)
+* Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the configuration)
 * Nodes and edges get removed after a while if no packets are sent (default is 10 s)
 * In fullscreen mode the whole screen is used for the graph(s)
 
 ### Configuration
 
-Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimps.conf`. Have a look they have comments.
+Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
+
+![screenshot](docs/screenshot2.png)
 
 
 ## Streaming of header data from your network interfaces via WebSockets
@@ -72,7 +78,7 @@ E.g. in JavaScript (browser) to get traffic from the network interface `wlp3s0` 
 var socket = new WebSocket(ws://myhost/netdata/?nif=wlp3s0);
 ```
 
-or more general with secure WebSockets and assuming net-glimps runs on the same host as your JavaScript is served.
+or more generally with secure WebSockets and assuming net-glimpse runs on the same host as your JavaScript is served.
 
 ```javascript
 var socket = new WebSocket(
@@ -85,7 +91,3 @@ The data format is JSON. The endpoint `/?nif=myNetworkInterface` just shows the 
 * It is possible to **stream different network interfaces in parallel**.
 * It is also possible to **stream the same network interface to multiple destinations**.
 
-
-## Run with sbt
-
-E.g. `sbt -Dhttp.address=172.23.1.81 -Dhttp.port=9000 run`
