@@ -10,10 +10,12 @@ function Visu(graph, config) {
     var correctionX;
     var correctionY;
 
+    p5.disableFriendlyErrors = true;
+
     p.setup = function () {
       p.createCanvas(config.canvas.width, config.canvas.height);
       calcCorrectionFactors();
-
+      p.frameRate(config.canvas.fps);
       p.background(config.canvas.backgroundColor);
       p.textAlign(p.CENTER);
     }
@@ -82,27 +84,27 @@ function Visu(graph, config) {
       var x2 = calcX(dstNode.particle.x);
       var y2 = calcY(dstNode.particle.y);
       drawArrow(x1, y1, x2, y2);
-      if (config.edge.showText && edge.text !== null) {
-        drawEdgeText(x1, y1, x2, y2, edge.text, edge.color);
-      }
+      drawEdgeText(x1, y1, x2, y2, edge.text, edge.color);
     }
 
     function drawArrow(x1, y1, x2, y2) {
       p.line(x1, y1, x2, y2);
       p.push();
       p.translate(x2, y2);
-      p.rotate(p.atan2(x1 - x2, y2 - y1));
+      p.rotate(Math.atan2(x1 - x2, y2 - y1));
       p.line(0, 0, -config.edge.arrowWidth, -config.edge.arrowLength);
       p.line(0, 0, config.edge.arrowWidth, -config.edge.arrowLength);
       p.pop();
     }
 
     function drawEdgeText(x1, y1, x2, y2, text, color) {
-      var xMiddle = x1 + ((x2 - x1) / 2);
-      var yMiddle = y1 + ((y2 - y1) / 2);
-      p.fill(0, 0, 0, color[3]);
-      p.strokeWeight(0);
-      p.text(text, xMiddle, yMiddle);
+      if (config.edge.showText) {
+        var xMiddle = x1 + ((x2 - x1) / 2);
+        var yMiddle = y1 + ((y2 - y1) / 2);
+        p.fill(0, 0, 0, color[3]);
+        p.strokeWeight(0);
+        p.text(text, xMiddle, yMiddle);
+      }
     }
 
     function drawNodes() {

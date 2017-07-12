@@ -33,7 +33,7 @@ var netDataReceiver = {};
       para.edgeText = etherTypeConfig[etherType].name;
     } else {
       para.edgeColor = etherTypeConfig["unknown"].color;
-      para.edgeText = null;
+      para.edgeText = etherType;
     }
     return para;
   }
@@ -52,42 +52,72 @@ var netDataReceiver = {};
       para.dstNodeColor = getColorFromIPv6(para.dstAddr);
     }
 
-    fillEdgeColorAndText(packet, para);
+    fillIpEdgeColorAndText(packet, para);
     return para;
   }
 
-  function fillEdgeColorAndText(packet, para) {
+  function fillIpEdgeColorAndText(packet, para) {
     if (packet.tcp) {
       var srcPort = packet.tcp.srcPort;
       var dstPort = packet.tcp.dstPort;
-      fillEdgeColorAndTextWithConfigData(srcPort, dstPort, para);
+      fillIpEdgeColorAndTextWithConfigData(srcPort, dstPort, para);
     } else if (packet.udp) {
       var srcPort = packet.udp.srcPort;
       var dstPort = packet.udp.dstPort;
-      fillEdgeColorAndTextWithConfigData(srcPort, dstPort, para);
+      fillIpEdgeColorAndTextWithConfigData(srcPort, dstPort, para);
     }
 
+    // If it's not a TCP or UDP packet show the protocol name as text
+    if (!para.edgeText) {
+      para.edgeText = packet.ip.protocol;
+    }
     if (!para.edgeColor) {
       para.edgeColor = ipPacketConfig["unknown"].color;
     }
-    if (!para.edgeText) {
-      para.edgeText = null;
+  }
+
+  function fillIpEdgeColorAndTextWithConfigData(srcPort, dstPort, para) {
+    // Always show port names (instead of numbers) if the port is in configIp and configIp.edges.showPortNames is true
+    if (configIp.edge.showPortNames) {
+      if (ipPacketConfig[srcPort]) {
+        // Show src port name like specified in ipPacketConfig
+        para.edgeText = ipPacketConfig[srcPort].name;
+        para.edgeColor = ipPacketConfig[srcPort].color;
+        return;
+      }
+      if (ipPacketConfig[dstPort]) {
+      // Show dst port name like specified in ipPacketConfig
+        para.edgeText = ipPacketConfig[dstPort].name;
+        para.edgeColor = ipPacketConfig[dstPort].color;
+        return;
+      }
+    }
+
+    // Show port numbers if configured in configIp
+    var srcPortText = getPortText(srcPort);
+    var dstPortText = getPortText(dstPort);
+    if (srcPortText !== null && dstPortText !== null) {
+      para.edgeText = srcPortText + ":" + dstPortText;
+      para.edgeColor = ipPacketConfig["unknown"].color;
+    } else if (srcPortText !== null && dstPortText === null) {
+      para.edgeText = srcPortText;
+      para.edgeColor = ipPacketConfig["unknown"].color;
+    } else if (srcPortText === null && dstPortText !== null) {
+      para.edgeText = dstPortText;
+      para.edgeColor = ipPacketConfig["unknown"].color;
+    } else {
+      para.edgeText = "";
+      para.edgeColor = ipPacketConfig["unknown"].color;
     }
   }
 
-  function fillEdgeColorAndTextWithConfigData(srcPort, dstPort, para) {
-    if (ipPacketConfig[srcPort]) {
-      para.edgeColor = ipPacketConfig[srcPort].color;
-      para.edgeText = ipPacketConfig[srcPort].name;
-    } else if (ipPacketConfig[dstPort]) {
-      para.edgeColor = ipPacketConfig[dstPort].color;
-      para.edgeText = ipPacketConfig[dstPort].name;
-    }
-    // If no name was found show at least the port numbers if at least one of the  ports is < 1024 or
-    // it's configured in configIp.showUnknownPorts
-    if (!para.edgeText &&
-      (srcPort < 1024 || dstPort < 1024 || configIp.showUnknownPorts)) {
-      para.edgeText = srcPort + ":" + dstPort;
+  function getPortText(port) {
+    if ((configIp.edge.showWellKnownPorts && port < 1024) ||
+      (configIp.edge.showRegisteredPorts && port >= 1024 && port < 49152) ||
+      (configIp.edge.showOtherPorts && port >= 49152)) {
+      return port;
+    } else {
+      return null;
     }
   }
 
