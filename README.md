@@ -18,11 +18,11 @@ net-glimpse has two parts: 1) Visualization of network traffic, and 2) Streaming
 
 ## How to run
 
-To run net-glimpse **Java 8** must be installed.
+Requirements: net-glimpse needs **Java 8** to run. For the visualizations you need a modern browser.
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
-1. Unzip
+1. Unzip and change into the unzipped folder
 
 1. To access network interfaces you have to start the program either as **root** or give Java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java` (but exchange the path to your Java installation).
 
@@ -52,18 +52,19 @@ You can open multiple pages of the same or different network interface(s) at the
 
 ### Visualization Details 
 
+* You can press 'p' to pause the drawing at any time
 * Nodes represent MAC or IP addresses
 * Node colors are determined by the MAC or IP address
 * Nodes blink when a new packet is sent
 * Edges represent sent packets
 * The arrow shows the direction of the sent packet
 * The edges get thicker the more packets are sent
-* Edge colors are determined by the EtherType (Ethernet) or TCP/UDP port (Internet) (scroll down to see a glossary)
-* If EtherType or port is one of the well known ones it's annotated at the edge (scroll down to see a glossary)
-* Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the configuration)
+* The EtherType (in the Ethernet visualization) is annotated at the edge (scroll down - under the graphic is a glossary)
+* In the Internet visualization if it is a TCP or UDP packet and the port is one of the well known or registered ones (port 0 to 49151) the port is annotated at the edge. The most common port numbers are exchanged with their names, eg. port 22 is exchanged with SSH (scroll down - under the graphic is a glossary).
+* If it's the Internet and not a TCP or UDP packet then the protocol name is annotated at the edge.
+* Edges of unknown EtherTypes or Internet packets are black/gray by default (but you can add new types in the config)
 * Nodes and edges get removed after a while if no packets are sent (default is 10 s)
-* In fullscreen mode the whole screen is used for the graph(s)
-* You can press 'p' at any time to pause the drawing
+* In fullscreen mode the whole screen is used for the graph(s) - otherwise they have a squared canvas
 
 ### Configuration
 
