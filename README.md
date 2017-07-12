@@ -18,11 +18,11 @@ net-glimpse has two parts: 1) Visualization of network traffic, and 2) Streaming
 
 ## How to run
 
-To run net-glimpse **Java 8** must be installed.
+Requirements: net-glimpse needs **Java 8** to run. For the visualizations you need a modern browser.
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
-1. Unzip
+1. Unzip and change into the unzipped folder
 
 1. To access network interfaces you have to start the program either as **root** or give Java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java` (but exchange the path to your Java installation).
 
