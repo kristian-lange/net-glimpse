@@ -63,6 +63,7 @@ You can open multiple pages of the same or different network interface(s) at the
 * Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the configuration)
 * Nodes and edges get removed after a while if no packets are sent (default is 10 s)
 * In fullscreen mode the whole screen is used for the graph(s)
+* You can press 'p' at any time to pause the drawing
 
 ### Configuration
 
