@@ -1,6 +1,6 @@
 # net-glimpse
 
-I wanted to have a little tool that can gives me a quick overview on what's going in my network, displaying it in the browser. Tools like [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
+I wanted to have a little tool that can gives me a quick overview on what's going in my network, displaying it in the browser. Tools like tcpdump or [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
 
 net-glimpse has two parts: 1) Visualization of network traffic, and 2) Streaming of header data from your network interfaces via WebSockets.
 
@@ -18,30 +18,33 @@ net-glimpse has two parts: 1) Visualization of network traffic, and 2) Streaming
 
 ## How to run
 
-To run net-glimpse **Java** must be installed.
+To run net-glimpse **Java 8** must be installed.
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
 1. Unzip
 
-1. To access network interfaces you have to start the program either as **root** or give java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java`.
+1. To access network interfaces you have to start the program either as **root** or give Java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java` (but exchange the path to your Java installation).
 
-1. Run on Linux or Unix/MacOS `./bin/net-glimpse`
+1. It might be necessary to make the run script executable: `chmod u+x ./bin/net-glimpse`
+
+1. Run on Linux or Unix `./bin/net-glimpse`
    
    You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimpse -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimpse to IP `172.23.1.81` and port `8080`.
 
-1. Try in a browser, e.g. with `http://localhost:9000/?nif=wlp3s0` for network interface `wlp3s0` to get all raw header data
+1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (instead of `myNetworkInterface` use the name of the network interface you want to intercept) - it should show you raw packet header data in JSON format
 
+If you are done with net-glimpse you can stop it with `Ctrl+C`.
 
 ## Visualization of network traffic
 
-1. `/glimpse?nif=myNetworkInterface` - shows both, Ethernet and Internet
+1. `http://localhost:9000/glimpse?nif=myNetworkInterface` - shows both, Ethernet and Internet
    
-1. `/ipglimpse?nif=myNetworkInterface` - shows only Internet
+1. `http://localhost:9000/ipglimpse?nif=myNetworkInterface` - shows only Internet
    
-1. `/etherglimpse?nif=myNetworkInterface` - shows only Ethernet
+1. `http://localhost:9000/etherglimpse?nif=myNetworkInterface` - shows only Ethernet
 
-1. `/?nif=myNetworkInterface` - shows raw packet header data in JSON
+1. `http://localhost:9000/?nif=myNetworkInterface` - shows raw packet header data in JSON
 
 E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
 
@@ -60,6 +63,7 @@ You can open multiple pages of the same or different network interface(s) at the
 * Edges of unknown EtherTypes or ports are black/gray and by default aren't shown at the edge (can be changed in the configuration)
 * Nodes and edges get removed after a while if no packets are sent (default is 10 s)
 * In fullscreen mode the whole screen is used for the graph(s)
+* You can press 'p' at any time to pause the drawing
 
 ### Configuration
 
@@ -86,7 +90,7 @@ var socket = new WebSocket(
       window.location.host + "/netdata/?nif=wlp3s0");
 ```
 
-The data format is JSON. The endpoint `/?nif=myNetworkInterface` just shows the raw data.
+The streamed packet header data are in JSON format.
 
 * It is possible to **stream different network interfaces in parallel**.
 * It is also possible to **stream the same network interface to multiple destinations**.
