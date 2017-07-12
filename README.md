@@ -89,7 +89,7 @@ var socket = new WebSocket(
       window.location.host + "/netdata/?nif=wlp3s0");
 ```
 
-The data format is JSON. The endpoint `/?nif=myNetworkInterface` just shows the raw data.
+The streamed packet header data are in JSON format.
 
 * It is possible to **stream different network interfaces in parallel**.
 * It is also possible to **stream the same network interface to multiple destinations**.
