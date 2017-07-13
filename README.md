@@ -18,25 +18,37 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 ## How to run
 
-Requirements: net-glimpse needs **Java 8** to run. For the visualizations you need a modern browser.
+Requirements: net-glimpse needs **Java 8** to run. For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
+
+So far it works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet.
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
 1. Unzip and change into the unzipped folder
 
-1. To access network interfaces you have to start the program either as **root** or give Java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java` (but exchange the path to your Java installation).
+1. On **Linux or Unix** to access network interfaces you have to start the net-glimpse either as **root** or give Java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java` (but exchange the path to your Java installation). On **Windows** you will be ask after starting the batch file if you want to grant access to the network interfaces.
 
-1. It might be necessary to make the run script executable: `chmod u+x ./bin/net-glimpse`
+1. On **Unix** it might be necessary to make the run script executable: `chmod u+x ./bin/net-glimpse`
 
-1. Run on Linux or Unix `./bin/net-glimpse`
+1. Run on **Linux or Unix** in the terminal `./bin/net-glimpse` - on **Windows** double-click the `./bin/net-glimpse.bat`
    
    You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimpse -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimpse to IP `172.23.1.81` and port `8080`.
+   
+   If net-glimps does not want to start have a look in its installation folder whether you find a file RUNNING_PID. Delete it and start again.
 
-1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (instead of `myNetworkInterface` use the name of the network interface you want to intercept) - it should show you raw packet header data in JSON format
+1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (instead of `myNetworkInterface` use the name of the network interface you want to intercept)
+   
+   net-glimps prints out potential network interface names (NIF) in it's log. You can copy-paste one from there. This is especially handy on **Windows** where they have names like, e.g. `\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}` which would lead to the URL `http://localhost:9000/?nif=\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}`.
+   
+   The resulting webpage shows a list of raw packet header data in JSON format.
+   
+   ![screenshot](docs/screenshot4.png)
 
-If you are done with net-glimpse you can stop it with `Ctrl+C`.
+1. If you are done with net-glimpse you can stop it with `Ctrl+C`.
 
 ## Visualization of network traffic
+
+Endpoints are:
 
 1. `http://localhost:9000/glimpse?nif=myNetworkInterface` - shows both, Ethernet and Internet
    
@@ -46,7 +58,7 @@ If you are done with net-glimpse you can stop it with `Ctrl+C`.
 
 1. `http://localhost:9000/?nif=myNetworkInterface` - shows raw packet header data in JSON
 
-E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`.
+E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`. 
 
 You can open multiple pages of the same or different network interface(s) at the same time.
 
