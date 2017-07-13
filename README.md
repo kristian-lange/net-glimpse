@@ -20,7 +20,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 Requirements: net-glimpse needs **Java 8** to run. For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
 
-So far it works on **Linux** and **Windows**. On Mac OS it doesn't work yet.
+So far it works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet.
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
