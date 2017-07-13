@@ -37,11 +37,11 @@ net-glimpse works on **Linux/Unix** (including **Mac OS X**) and **Windows**.
    
    You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. By default `localhost` and `9000` is used. E.g. `./bin/net-glimpse -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimpse to IP `172.23.1.81` and port `8080`.
    
-   If net-glimps does not want to start have a look in its installation folder whether you find a file RUNNING_PID. Delete it and start again.
+   If net-glimpse does not want to start have a look in its installation folder whether you find a file RUNNING_PID. Delete it and start again.
 
 1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (instead of `myNetworkInterface` use the name of the network interface you want to intercept)
    
-   net-glimps prints out potential network interface names (NIF) in it's log. You can copy-paste one from there. This is especially handy on **Windows** where they have names like, e.g. `\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}` which would lead to the URL `http://localhost:9000/?nif=\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}`.
+   net-glimpse prints out potential network interface names (NIF) in it's log. You can copy-paste one from there. This is especially handy on **Windows** where they have names like, e.g. `\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}` which would lead to the URL `http://localhost:9000/?nif=\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}`.
    
    The resulting webpage shows a list of raw packet header data in JSON format.
    
