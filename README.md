@@ -20,7 +20,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 So far net-glimpse works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet.
 
-**Prerequisites**
+**Prerequisites:**
 * net-glimpse needs **Java 8** to run.
 * For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
 * On **Windows** it is necessary to install Npcap (https://nmap.org/npcap/) **OR** winpcap (https://www.winpcap.org/). On **Linux/Unix** libpcap is needed.
