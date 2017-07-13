@@ -18,7 +18,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 ## How to run
 
-So far net-glimpse works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet.
+net-glimpse works on **Linux/Unix** (including **Mac OS X**) and **Windows**.
 
 **Prerequisites:**
 * net-glimpse needs **Java 8** to run.
