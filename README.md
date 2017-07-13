@@ -4,29 +4,32 @@ I wanted to have a little tool that can gives me a quick overview on what's goin
 
 net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or Internet), and 2) Streaming of header data from your network interfaces via WebSockets.
 
-**Have a look at [this video](https://youtu.be/-ICbIZWSxSQ).**
+**Have a look at [this video](https://youtu.be/Nvm5NaTZLGY).**
 
-![screenshot](docs/screenshot3.png)
+![screenshot](docs/screenshot6.png)
 
 ### Used technologies
 
 * Java, JavaScript
 * Pcap4J (https://github.com/kaitoy/pcap4j) to access network interfaces
 * Play Framework 2.5 and sbt
-* Akka to distribute network interface data to multiple WebSockets
+* [Akka](http://akka.io/) to distribute network interface data to multiple WebSockets
 * Graphics with [p5js](https://p5js.org/) and physics with [toxiclibs](https://github.com/hapticdata/toxiclibsjs)
 
 ## How to run
 
-Requirements: net-glimpse needs **Java 8** to run. For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
+So far net-glimpse works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet.
 
-So far it works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet.
+**Prerequisites:**
+* net-glimpse needs **Java 8** to run.
+* For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
+* On **Windows** it is necessary to install Npcap (https://nmap.org/npcap/) **OR** winpcap (https://www.winpcap.org/). On **Linux/Unix** libpcap is needed.
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
 1. Unzip and change into the unzipped folder
 
-1. On **Linux or Unix** to access network interfaces you have to start the net-glimpse either as **root** or give Java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java` (but exchange the path to your Java installation). On **Windows** you will be ask after starting the batch file if you want to grant access to the network interfaces.
+1. On **Linux or Unix** to access network interfaces you have to start the net-glimpse either as **root** or give Java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java` (but exchange the path to your Java installation). On **Windows** you will be ask after starting net-glimpse's batch file if you want to grant access to the network interfaces.
 
 1. On **Unix** it might be necessary to make the run script executable: `chmod u+x ./bin/net-glimpse`
 
@@ -60,11 +63,14 @@ Endpoints are:
 
 E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`. 
 
-You can open multiple pages of the same or different network interface(s) at the same time.
+![screenshot](docs/screenshot5.png)
+
+**You can open multiple pages of the same or different network interface(s) at the same time.**
 
 ### Visualization Details 
 
 * You can press 'p' to pause the drawing at any time
+* It's actually a [force-directed graph](https://en.wikipedia.org/wiki/Force-directed_graph_drawing)
 * Nodes represent MAC or IP addresses
 * Node colors are determined by the MAC or IP address
 * Nodes blink when a new packet is sent
@@ -80,7 +86,7 @@ You can open multiple pages of the same or different network interface(s) at the
 
 ### Configuration
 
-Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
+Many parameters of the visualizations (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
 
 ![screenshot](docs/screenshot2.png)
 
