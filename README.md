@@ -28,7 +28,7 @@ So far it works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet
 
 1. On **Linux or Unix** to access network interfaces you have to start the net-glimpse either as **root** or give Java special capabilities, e.g. with `sudo setcap cap_net_raw,cap_net_admin=eip /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java` (but exchange the path to your Java installation). On **Windows** you will be ask after starting the batch file if you want to grant access to the network interfaces.
 
-1. On Unix it might be necessary to make the run script executable: `chmod u+x ./bin/net-glimpse`
+1. On **Unix** it might be necessary to make the run script executable: `chmod u+x ./bin/net-glimpse`
 
 1. Run on **Linux or Unix** in the terminal `./bin/net-glimpse` - on **Windows** double-click the `./bin/net-glimpse.bat`
    
