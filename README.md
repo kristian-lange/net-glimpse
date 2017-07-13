@@ -38,7 +38,7 @@ So far it works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet
 
 1. Try in a browser, e.g. with `http://localhost:9000/?nif=myNetworkInterface` (instead of `myNetworkInterface` use the name of the network interface you want to intercept)
    
-   net-glimps prints out potential network interface names (NIF) in it's log. You can copy-paste one from there (especially handy on Windows where they have names like, e.g. `\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}` which lead to the URL `http://localhost:9000/?nif=\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}`.
+   net-glimps prints out potential network interface names (NIF) in it's log. You can copy-paste one from there. This is especially handy on **Windows** where they have names like, e.g. `\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}` which would lead to the URL `http://localhost:9000/?nif=\Device\NPF_{998BB72F-3468-413E-813C-7E3A2E7B591B}`.
    
    The resulting webpage shows a list of raw packet header data in JSON format.
    
