@@ -4,7 +4,7 @@ I wanted to have a little tool that can gives me a quick overview on what's goin
 
 net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or Internet), and 2) Streaming of header data from your network interfaces via WebSockets.
 
-**Have a look at [this video](https://youtu.be/-ICbIZWSxSQ).**
+**Have a look at [this video](https://youtu.be/Nvm5NaTZLGY).**
 
 ![screenshot](docs/screenshot6.png)
 
