@@ -13,9 +13,11 @@ import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.io.EOFException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Using Pcap4J (https://github.com/kaitoy/pcap4j#documents) to access network
@@ -121,7 +123,7 @@ public class PcapInitializer {
         // TODO Maybe there is a non-blocking way to get the packets
         while (true) {
             try {
-                Packet packet = pcapHandle.getNextPacket();
+                Packet packet = pcapHandle.getNextPacketEx();
                 if (packet != null) {
                     JsonNode jsonNode = packetToJsonTransfer
                             .packageToJson(packet, pcapHandle.getTimestamp());
@@ -131,6 +133,8 @@ public class PcapInitializer {
                 }
             } catch (NotOpenException e) {
                 break;
+            } catch (PcapNativeException | EOFException | TimeoutException e) {
+                continue;
             }
         }
     }
