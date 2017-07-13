@@ -177,8 +177,8 @@ function Edge(srcNode, dstNode, text, physics, config) {
     this.color[3] = 255;
     this.text = text;
     this.width = config.edge.tickWidth;
-    if (this.weight < 10) {
-      this.weight += 0.05;
+    if (this.weight < config.edge.tickWeightMax) {
+      this.weight += config.edge.tickWeightStep;
     }
   }
 
