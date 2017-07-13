@@ -6,7 +6,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 **Have a look at [this video](https://youtu.be/-ICbIZWSxSQ).**
 
-![screenshot](docs/screenshot3.png)
+![screenshot](docs/screenshot6.png)
 
 ### Used technologies
 
@@ -60,7 +60,9 @@ Endpoints are:
 
 E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?nif=wlp3s0) shows a visualization of the Ethernet layer and the Internet layer of the network interface `wlp3s0`. 
 
-You can open multiple pages of the same or different network interface(s) at the same time.
+![screenshot](docs/screenshot5.png)
+
+**You can open multiple pages of the same or different network interface(s) at the same time.**
 
 ### Visualization Details 
 
