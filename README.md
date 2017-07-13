@@ -18,9 +18,12 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 ## How to run
 
-Requirements: net-glimpse needs **Java 8** to run. For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
+So far net-glimpse works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet.
 
-So far it works on **Linux/Unix** and **Windows**. On Mac OS it doesn't work yet.
+**Prerequisites**
+* net-glimpse needs **Java 8** to run.
+* For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
+* On **Windows** it is necessary to install Npcap (https://nmap.org/npcap/) **OR** winpcap (https://www.winpcap.org/). On **Linux/Unix** libpcap is needed.
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
@@ -82,7 +85,7 @@ E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?
 
 ### Configuration
 
-Many parameters (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
+Many parameters of the visualizations (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
 
 ![screenshot](docs/screenshot2.png)
 
