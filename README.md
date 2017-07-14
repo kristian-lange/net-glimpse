@@ -72,7 +72,7 @@ E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?
 * You can press 'p' to pause the drawing at any time
 * It's actually a [force-directed graph](https://en.wikipedia.org/wiki/Force-directed_graph_drawing)
 * Nodes represent MAC or IP addresses
-* Node colors are determined by the MAC or IP address
+* Node colors are determined by the MAC or IP address (means the same MAC or IP address leads always to the same color)
 * Nodes blink when a new packet is sent
 * Edges represent sent packets
 * The arrow shows the direction of the sent packet
