@@ -41,8 +41,8 @@ var netDataReceiver = {};
   function getParameterForIPVisu(packet) {
     var para = {};
 
-    para.srcAddr = packet.ip.srcAddr.substring(1);
-    para.dstAddr = packet.ip.dstAddr.substring(1);
+    para.srcAddr = packet.ip.srcAddr;
+    para.dstAddr = packet.ip.dstAddr;
 
     if (packet.ip.version === "IPv4") {
       para.srcNodeColor = getColorFromIPv4(para.srcAddr);
@@ -50,6 +50,10 @@ var netDataReceiver = {};
     } else if (packet.ip.version === "IPv6") {
       para.srcNodeColor = getColorFromIPv6(para.srcAddr);
       para.dstNodeColor = getColorFromIPv6(para.dstAddr);
+    }
+    // Multicast address's nodes are white (broadcast are already white)
+    if (packet.ip.dstIsMc === true ) {
+        para.dstNodeColor = [255, 255, 255];
     }
 
     fillIpEdgeColorAndText(packet, para);

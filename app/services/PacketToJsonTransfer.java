@@ -64,8 +64,9 @@ public class PacketToJsonTransfer {
     private JsonNode getIpPacketMetrics(IpPacket ipPacket) {
         ObjectNode jsonNode = Json.newObject();
         IpPacket.IpHeader header = ipPacket.getHeader();
-        jsonNode.put("srcAddr", header.getSrcAddr().toString());
-        jsonNode.put("dstAddr", header.getDstAddr().toString());
+        jsonNode.put("srcAddr", header.getSrcAddr().getHostAddress());
+        jsonNode.put("dstAddr", header.getDstAddr().getHostAddress());
+        jsonNode.put("dstIsMc", header.getDstAddr().isMulticastAddress());
         jsonNode.put("protocol", header.getProtocol().name());
         jsonNode.put("version", header.getVersion().name());
         return jsonNode;
