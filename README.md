@@ -35,7 +35,7 @@ net-glimpse works on **Linux/Unix** (including **Mac OS X**) and **Windows**.
 
 1. Run on **Linux or Unix** in the terminal `./bin/net-glimpse` - on **Windows** double-click the `./bin/net-glimpse.bat`
    
-   You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. E.g. `./bin/net-glimpse -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimpse to IP `172.23.1.81` and port `8080`. If you don't specify these parameters the defaults `localhost` and `9000` are used.
+   You can specify IP and port with the parameters `-Dhttp.address` and `-Dhttp.port`. E.g. `./bin/net-glimpse -Dhttp.address=172.23.1.81 -Dhttp.port=8080` binds net-glimpse to IP `172.23.1.81` and port `8080`. If you don't specify these parameters the defaults `0.0.0.0` (all addresses) and `9000` are used.
    
    If net-glimpse does not want to start have a look in its installation folder whether you find a file RUNNING_PID. Delete it and start again.
 
