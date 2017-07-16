@@ -137,11 +137,15 @@ The streamed packet header data are in JSON format.
 
 #### Via -D run parameters
 
+net-glimpse takes a couple of parameters:
+
 * `-Dnif` - Specifies the default network interface. If you specify it here you can leave it out in the URL query. It has no default.
 * `-DskipOwnTraffic` - If true net-glimpse's own network traffic (via WebSockets) is not streamed. Default is `true`.
 * `-Dsnaplen` - Sets the snap length (see [wiki.wireshark.org/SnapLen](https://wiki.wireshark.org/SnapLen) for more info). Default is `128` byte.
 * `-Dhttp.address` - Specifies the IP address net-glimpse runs on. Default is `0.0.0.0` (listens on all IPs).
 * `-Dhttp.port` - Specifies the port net-glimpse runs on. Default is `9000`.
+
+e.g. `./bin/net-glimpse -Dhttp.address=192.168.178.160 -Dhttp.port=80 -Dnif=wlp3s0 -DskipOwnTraffic=false`
 
 #### Via `conf/application.conf`
 
