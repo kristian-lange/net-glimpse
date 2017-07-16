@@ -12,7 +12,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 * Java, JavaScript
 * Pcap4J (https://github.com/kaitoy/pcap4j) to access network interfaces
-* Play Framework 2.5 and sbt
+* Play Framework and sbt
 * [Akka](http://akka.io/) to distribute network interface data to multiple WebSockets
 * Graphics with [p5js](https://p5js.org/) and physics with [toxiclibs](https://github.com/hapticdata/toxiclibsjs)
 
