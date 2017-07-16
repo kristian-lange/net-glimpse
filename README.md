@@ -18,14 +18,14 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 ### Contents
 
-* (How to run)[#how-to-run]
-  * (Prerequisites)[#prerequisites]
-  * (Install and run)[#install-and-run]
-* (Visualization of network traffic)[#visualization-of-network-traffic]
-  * (Endpoints)[#endpoints]
-  * (Visualization Details)[#visualization-details]
-  * (Visualization Configuration)[#visualization-configuration]
-* (Streaming of header data from your network interfaces via WebSockets)[#streaming-of-header-data-from-your-network-interfaces-via-websockets]
+* [How to run](#how-to-run)
+  * [Prerequisites](#prerequisites)
+  * [Install and run](#install-and-run)
+* [Visualization of network traffic](#visualization-of-network-traffic)
+  * [Endpoints](#endpoints)
+  * [Visualization Details](#visualization-details)
+  * [Visualization Configuration](#visualization-configuration)
+* [Streaming of header data from your network interfaces via WebSockets](#streaming-of-header-data-from-your-network-interfaces-via-websockets)
 
 
 ## How to run
