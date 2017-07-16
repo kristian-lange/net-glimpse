@@ -25,7 +25,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
   * [Endpoints](#endpoints)
   * [Visualization Details](#visualization-details)
   * [Visualization Configuration](#visualization-configuration)
-* [Streaming of header data from your network interfaces via WebSockets](#streaming-of-header-data-from-your-network-interfaces-via-websockets)
+* [Streaming of header data from your network interfaces via WebSockets](#streaming-of-header-data-from-your-network-interfaces-via-websockets-backend)
   * [Usage in JavaScript](#usage-in-javascript)
   * [Backend configuration](#backend-configuration)
 
