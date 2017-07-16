@@ -16,14 +16,29 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 * [Akka](http://akka.io/) to distribute network interface data to multiple WebSockets
 * Graphics with [p5js](https://p5js.org/) and physics with [toxiclibs](https://github.com/hapticdata/toxiclibsjs)
 
+### Contents
+
+* (How to run)[#how-to-run]
+  * (Prerequisites)[#prerequisites]
+  * (Install and run)[#install-and-run]
+* (Visualization of network traffic)[#visualization-of-network-traffic]
+  * (Endpoints)[#endpoints]
+  * (Visualization Details)[#visualization-details]
+  * (Visualization Configuration)[#visualization-configuration]
+* (Streaming of header data from your network interfaces via WebSockets)[#streaming-of-header-data-from-your-network-interfaces-via-websockets]
+
+
 ## How to run
 
 net-glimpse works on **Linux/Unix** (including **Mac OS X**) and **Windows**.
 
-**Prerequisites:**
+### Prerequisites
+
 * net-glimpse needs **Java 8** to run.
 * For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
 * On **Windows** it is necessary to install _Npcap_ (https://nmap.org/npcap/) **OR** _WinPcap_ (https://www.winpcap.org/). On **Linux/Unix** _libpcap_ is needed.
+
+### Install and run
 
 1. [Download the net-glimpse-x.x.zip](https://github.com/kristian-lange/net-glimpse/releases)
 
@@ -49,9 +64,10 @@ net-glimpse works on **Linux/Unix** (including **Mac OS X**) and **Windows**.
 
 1. If you are done with net-glimpse you can stop it with `Ctrl+C`.
 
+
 ## Visualization of network traffic
 
-Endpoints are:
+### Endpoints
 
 1. `http://localhost:9000/glimpse?nif=myNetworkInterface` - shows both, Ethernet and Internet
    
@@ -84,7 +100,7 @@ E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?
 * Nodes and edges get removed after a while if no packets are sent (default is 10 s)
 * In fullscreen mode the whole screen is used for the graph(s) - otherwise they have a squared canvas
 
-### Configuration
+### Visualization Configuration
 
 Many parameters of the visualizations (e.g. colors, node size, node repulsion, cleaning interval) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
 
