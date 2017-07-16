@@ -45,7 +45,7 @@ public class PcapInitializer {
      * If false net-glimpse filters out its own traffic
      * (specified in application.conf)
      */
-    private final boolean showOwnTraffic;
+    private final boolean skipOwnTraffic;
 
     /**
      * IP / host the Play framework is  bound to (default 0.0.0.0)
@@ -80,8 +80,8 @@ public class PcapInitializer {
 
         this.defaultNifName =
                 configuration.getString("nif", "empty");
-        this.showOwnTraffic =
-                configuration.getBoolean("showOwnTraffic", false);
+        this.skipOwnTraffic =
+                configuration.getBoolean("skipOwnTraffic", true);
         this.httpAddress = configuration.getString("play.server.http.address");
         this.httpPort = configuration.getInt("play.server.http.port");
         this.snaplen = configuration.getInt("snaplen", 65536);
@@ -126,6 +126,9 @@ public class PcapInitializer {
             return nif.openLive(snaplen,
                     PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10);
         } catch (PcapNativeException e) {
+            if (defaultNifName.equals("empty")) {
+                logger.error("No network interface specified!");
+            }
             logger.error(
                     "Couldn't open network interface " + networkInterfaceName,
                     e);
@@ -149,7 +152,7 @@ public class PcapInitializer {
                 if (packet == null) {
                     continue;
                 }
-                if (!showOwnTraffic && isOurPacket(packet)) {
+                if (skipOwnTraffic && isOurPacket(packet)) {
                     continue;
                 }
 
