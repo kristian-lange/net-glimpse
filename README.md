@@ -135,7 +135,7 @@ The streamed packet header data are in JSON format.
 
 ### Backend configuration
 
-## Via -D run parameters
+#### Via -D run parameters
 
 * `-Dnif` - Specifies the default network interface. If you specify it here you can leave it out in the URL query. It has no default.
 * `-DskipOwnTraffic` - If true net-glimpse's own network traffic (via WebSockets) is not streamed. Default is `true`.
@@ -143,6 +143,6 @@ The streamed packet header data are in JSON format.
 * `-Dhttp.address` - Specifies the IP address net-glimpse runs on. Default is `0.0.0.0` (listens on all IPs).
 * `-Dhttp.port` - Specifies the port net-glimpse runs on. Default is `9000`.
 
-## Via `conf/application.conf`
+#### Via `conf/application.conf`
 
 All parameters that can be specified via -D run parameters can be set in `./conf/application.conf` too.
