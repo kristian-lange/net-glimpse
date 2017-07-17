@@ -75,7 +75,7 @@ function Visu(graph, config) {
         edge.weight -= config.edge.weightStep;
       }
       if (edge.color[3] > config.edge.transparency) {
-        edge.color[3] -= 5;
+        edge.color[3] -= config.edge.transparencyTickStep;
       }
       p.strokeWeight(edge.width * edge.weight);
       p.stroke(edge.color[0], edge.color[1], edge.color[2], edge.color[3]);
@@ -116,7 +116,7 @@ function Visu(graph, config) {
         p.translate(calcX(node.particle.x), calcY(node.particle.y));
         p.stroke(0, 0, 0, node.color[3]);
         if (node.color[3] > config.node.transparency) {
-          node.color[3] -= 5;
+          node.color[3] -= config.node.transparencyTickStep;
         }
         p.fill(node.color[0], node.color[1], node.color[2], node.color[3]);
         if (node.width > config.node.width) {
