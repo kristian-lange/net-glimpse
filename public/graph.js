@@ -128,7 +128,7 @@ function Node(addr, physics, config) {
   physics.addParticle(this.particle);
   this.behavior = new AttractionBehavior(
     this.particle,
-    0.2, // radius
+    config.physics.nodeRepulsionRange,
     -config.physics.nodeRepulsion,
     0 // jitter
   );
