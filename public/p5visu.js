@@ -68,15 +68,7 @@ function Visu(graph, config) {
     }
 
     function drawEdge(edge, srcNode, dstNode) {
-      if (edge.width > config.edge.width) {
-        edge.width--;
-      }
-      if (edge.weight > 1) {
-        edge.weight -= config.edge.weightStep;
-      }
-      if (edge.color[3] > config.edge.transparency) {
-        edge.color[3] -= config.edge.transparencyTickStep;
-      }
+      edge.update();
       p.strokeWeight(edge.width * edge.weight);
       p.stroke(edge.color[0], edge.color[1], edge.color[2], edge.color[3]);
       var x1 = calcX(srcNode.particle.x);
@@ -113,15 +105,10 @@ function Visu(graph, config) {
       Object.keys(graph.nodes).forEach(function (addr) {
         p.push();
         var node = graph.nodes[addr];
+        node.update();
+        p.fill(node.color[0], node.color[1], node.color[2], node.color[3]);
         p.translate(calcX(node.particle.x), calcY(node.particle.y));
         p.stroke(0, 0, 0, node.color[3]);
-        if (node.color[3] > config.node.transparency) {
-          node.color[3] -= config.node.transparencyTickStep;
-        }
-        p.fill(node.color[0], node.color[1], node.color[2], node.color[3]);
-        if (node.width > config.node.width) {
-          node.width--;
-        }
         p.ellipse(0, 0, node.width);
         if (config.node.showText) {
           p.stroke(0, 0, 0, node.color[3]);

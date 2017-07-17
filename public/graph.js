@@ -134,6 +134,7 @@ function Node(addr, physics, config) {
   );
   physics.addBehavior(this.behavior);
 
+  // tick is called each time this node was either the src node dst node of a packet
   this.tick = function (dateNow, color) {
     this.lastSeen = dateNow;
     this.color[0] = color[0];
@@ -141,6 +142,18 @@ function Node(addr, physics, config) {
     this.color[2] = color[2];
     this.color[3] = 255;
     this.width = config.node.tickWidth;
+  }
+
+  // update is called during each frame drawing
+  this.update = function() {
+    if (this.color[3] > config.node.transparency) {
+      // Return to normal transparency after a tick
+      this.color[3] -= config.node.transparencyTickStep;
+    }
+    if (this.width > config.node.width) {
+      // Return to normal width after a tick
+      this.width--;
+    }
   }
 
   this.removePhysics = function () {
@@ -170,6 +183,7 @@ function Edge(srcNode, dstNode, text, physics, config) {
   );
   physics.addSpring(this.spring);
 
+  // tick is called if a packet was sent on this edge
   this.tick = function (color, text) {
     this.color[0] = color[0];
     this.color[1] = color[1];
@@ -178,7 +192,23 @@ function Edge(srcNode, dstNode, text, physics, config) {
     this.text = text;
     this.width = config.edge.tickWidth;
     if (this.weight < config.edge.tickWeightMax) {
-      this.weight += config.edge.tickWeightStep;
+      this.weight += 3 * config.edge.tickWeightStep;
+    }
+  }
+
+  // update is called during each frame drawing
+  this.update = function() {
+    if (this.width > config.edge.width) {
+      // Return to normal width after a tick
+      this.width -= config.edge.tickWidthStep;
+    }
+    if (this.weight > 1) {
+      // Regress to normal width weight
+      this.weight -= config.edge.tickWeightStep;
+    }
+    if (this.color[3] > config.edge.transparency) {
+      // Return to normal transparency after a tick
+      this.color[3] -= config.edge.transparencyTickStep;
     }
   }
 
