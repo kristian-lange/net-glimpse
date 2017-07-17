@@ -25,7 +25,9 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
   * [Endpoints](#endpoints)
   * [Visualization Details](#visualization-details)
   * [Visualization Configuration](#visualization-configuration)
-* [Streaming of header data from your network interfaces via WebSockets](#streaming-of-header-data-from-your-network-interfaces-via-websockets)
+* [Streaming of header data from your network interfaces via WebSockets](#streaming-of-header-data-from-your-network-interfaces-via-websockets-backend)
+  * [Usage in JavaScript](#usage-in-javascript)
+  * [Backend configuration](#backend-configuration)
 
 
 ## How to run
@@ -89,6 +91,7 @@ E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?
 * It's actually a [force-directed graph](https://en.wikipedia.org/wiki/Force-directed_graph_drawing)
 * Nodes represent MAC or IP addresses
 * Node colors are determined by the MAC or IP address (means the same MAC or IP address leads always to the same color)
+* Nodes with broadcast or multicast IP addresses are white.
 * Nodes blink when a new packet is sent
 * Edges represent sent packets
 * The arrow shows the direction of the sent packet
@@ -107,7 +110,9 @@ Many parameters of the visualizations (e.g. colors, node size, node repulsion, c
 ![screenshot](docs/screenshot2.png)
 
 
-## Streaming of header data from your network interfaces via WebSockets
+## Streaming of header data from your network interfaces via WebSockets (backend)
+
+### Usage in JavaScript
 
 If you just want to get the header data without the visualization you have to open a WebSocket with the URL `/netdata` and the network interface you want to intercept has to be specified in the query string with the parameter 'nif'. 
 
@@ -117,7 +122,7 @@ E.g. in JavaScript (browser) to get traffic from the network interface `wlp3s0` 
 var socket = new WebSocket(ws://myhost/netdata/?nif=wlp3s0);
 ```
 
-or more generally with secure WebSockets and assuming net-glimpse runs on the same host as your JavaScript is served.
+or more generally with secure WebSockets and assuming net-glimpse runs on the same host as your JavaScript is served from.
 
 ```javascript
 var socket = new WebSocket(
@@ -129,4 +134,22 @@ The streamed packet header data are in JSON format.
 
 * It is possible to **stream different network interfaces in parallel**.
 * It is also possible to **stream the same network interface to multiple destinations**.
+* Only header data are captured and streamed via WebSockets - the actual payload is not read.
 
+### Backend configuration
+
+#### Via -D run parameters
+
+net-glimpse takes a couple of parameters:
+
+* `-Dnif` - Specifies the default network interface. If you specify it here you can leave it out in the URL query. It has no default.
+* `-DskipOwnTraffic` - If true net-glimpse's own network traffic (via WebSockets) is not streamed. Default is `true`.
+* `-Dsnaplen` - Sets the snap length (see [wiki.wireshark.org/SnapLen](https://wiki.wireshark.org/SnapLen) for more info). Default is `128` byte.
+* `-Dhttp.address` - Specifies the IP address net-glimpse runs on. Default is `0.0.0.0` (listens on all IPs).
+* `-Dhttp.port` - Specifies the port net-glimpse runs on. Default is `9000`.
+
+e.g. `./bin/net-glimpse -Dhttp.address=192.168.178.160 -Dhttp.port=80 -Dnif=wlp3s0 -DskipOwnTraffic=false`
+
+#### Via `conf/application.conf`
+
+All parameters that can be specified via -D run parameters can be set in `./conf/application.conf` too.
