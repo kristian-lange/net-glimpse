@@ -73,7 +73,7 @@ function Graph(config) {
     var oldNodes = [];
     Object.keys(allNodes).forEach(function (addr) {
       var node = allNodes[addr];
-      if ((dateNow - node.lastSeen) > config.graph.cleaningAge) {
+      if ((dateNow - node.lastSeen) > config.graph.maxAge) {
         oldNodes.push(node);
       }
     });
@@ -148,7 +148,7 @@ function Node(addr, physics, config) {
   this.update = function() {
     if (this.color[3] > config.node.transparency) {
       // Return to normal transparency after a tick
-      this.color[3] -= config.node.transparencyTickStep;
+      this.color[3] -= config.node.transparencyStep;
     }
     if (this.width > config.node.width) {
       // Return to normal width after a tick
@@ -191,8 +191,8 @@ function Edge(srcNode, dstNode, text, physics, config) {
     this.color[3] = 255;
     this.text = text;
     this.width = config.edge.tickWidth;
-    if (this.weight < config.edge.tickWeightMax) {
-      this.weight += 3 * config.edge.tickWeightStep;
+    if (this.weight < config.edge.weightMax) {
+      this.weight += config.edge.weightStepIncr;
     }
   }
 
@@ -200,15 +200,15 @@ function Edge(srcNode, dstNode, text, physics, config) {
   this.update = function() {
     if (this.width > config.edge.width) {
       // Return to normal width after a tick
-      this.width -= config.edge.tickWidthStep;
+      this.width -= config.edge.widthStep;
     }
     if (this.weight > 1) {
       // Regress to normal width weight
-      this.weight -= config.edge.tickWeightStep;
+      this.weight -= config.edge.weightStepDecr;
     }
     if (this.color[3] > config.edge.transparency) {
       // Return to normal transparency after a tick
-      this.color[3] -= config.edge.transparencyTickStep;
+      this.color[3] -= config.edge.transparencyStep;
     }
   }
 

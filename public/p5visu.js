@@ -69,7 +69,7 @@ function Visu(graph, config) {
 
     function drawEdge(edge, srcNode, dstNode) {
       edge.update();
-      p.strokeWeight(edge.width * edge.weight);
+      p.strokeWeight(edge.width + edge.weight);
       p.stroke(edge.color[0], edge.color[1], edge.color[2], edge.color[3]);
       var x1 = calcX(srcNode.particle.x);
       var y1 = calcY(srcNode.particle.y);
