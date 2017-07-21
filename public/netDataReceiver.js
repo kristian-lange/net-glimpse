@@ -1,3 +1,8 @@
+/*
+net-glimpse
+Created by Kristian Lange on 2017.
+*/
+
 var netDataReceiver = {};
 
 (function () {
@@ -12,10 +17,14 @@ var netDataReceiver = {};
 
     socket.onmessage = function (event) {
       var packet = JSON.parse(event.data);
-      if (packet.ethernet && typeof graphEther !== 'undefined') {
+      if (packet.ethernet && typeof graphEther !== 'undefined' &&
+        !isInBlacklist(etherBlacklist, packet.ethernet.macSrcAddr) &&
+        !isInBlacklist(etherBlacklist, packet.ethernet.macDstAddr)) {
         graphEther.fill(getParameterForEtherVisu(packet));
       }
-      if (packet.ip && typeof graphIp !== 'undefined') {
+      if (packet.ip && typeof graphIp !== 'undefined' &&
+        !isInBlacklist(ipBlacklist, packet.ip.srcAddr) &&
+        !isInBlacklist(ipBlacklist, packet.ip.dstAddr)) {
         graphIp.fill(getParameterForIPVisu(packet));
       }
     }
@@ -52,8 +61,8 @@ var netDataReceiver = {};
       para.dstNodeColor = getColorFromIPv6(para.dstAddr);
     }
     // Multicast address's nodes are white (broadcast are already white)
-    if (packet.ip.dstIsMc === true ) {
-        para.dstNodeColor = [255, 255, 255];
+    if (packet.ip.dstIsMc === true) {
+      para.dstNodeColor = [255, 255, 255];
     }
 
     fillIpEdgeColorAndText(packet, para);
@@ -90,7 +99,7 @@ var netDataReceiver = {};
         return;
       }
       if (ipPacketConfig[dstPort]) {
-      // Show dst port name like specified in ipPacketConfig
+        // Show dst port name like specified in ipPacketConfig
         para.edgeText = ipPacketConfig[dstPort].name;
         para.edgeColor = ipPacketConfig[dstPort].color;
         return;
@@ -161,6 +170,12 @@ var netDataReceiver = {};
     color[1] = ((i >> 16) & 0xFF);
     color[2] = ((i >> 8) & 0xFF);
     return color;
+  }
+
+  function isInBlacklist(blacklist, addr) {
+    return blacklist.some(function (regexp) {
+      return regexp.test(addr);
+    });
   }
 
 })();

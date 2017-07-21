@@ -1,3 +1,8 @@
+/*
+net-glimps
+Created by Kristian Lange on 2017.
+*/
+
 var VerletPhysics2D = toxi.physics2d.VerletPhysics2D,
   VerletParticle2D = toxi.physics2d.VerletParticle2D,
   VerletSpring2D = toxi.physics2d.VerletSpring2D,

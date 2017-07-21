@@ -1,3 +1,8 @@
+/*
+net-glimpse
+Created by Kristian Lange on 2017.
+*/
+
 function setSingleCanvasSize(config, graph) {
   if (isFullscreen()) {
     document.getElementById('canvasContainer').style.width = getWindowWidth() + "px";

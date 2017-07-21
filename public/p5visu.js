@@ -1,3 +1,8 @@
+/*
+net-glimpse
+Created by Kristian Lange on 2017.
+*/
+
 function Visu(graph, config) {
 
   this.s = function (p) {
