@@ -1,4 +1,4 @@
-# net-glimpse
+![screenshot](docs/ng-logo2_l.png)
 
 I wanted to have a little tool that can gives me a quick overview on what's going in my network right now, displaying it in the browser. Tools like tcpdump or [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
 
