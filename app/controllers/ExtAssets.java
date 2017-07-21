@@ -6,8 +6,15 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.File;
 
+/**
+ * Controller for loading of external files (outside of jar)
+ * <p>
+ * Created by Kristian Lange on 2017.
+ */
+@Singleton
 public class ExtAssets extends Controller {
 
     private static final Logger.ALogger LOGGER = Logger.of(ExtAssets.class);

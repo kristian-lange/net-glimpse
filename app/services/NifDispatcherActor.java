@@ -10,16 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Akka actor handling a single network interface and forwards all arriving messages to all subscribing {@link WebSocketActor}. It also
- * cares for a WebSocket register where WebSocket actors can subscribe and unsubscribe.
+ * Akka actor handling a single network interface and forwards all arriving
+ * messages to all subscribing {@link WebSocketActor}. It also cares for a
+ * WebSocket register where WebSocket actors can subscribe and unsubscribe.
  * <p>
  * It is created by the {@link PcapInitializer}.
  * <p>
- * Created by klange on 15.06.17.
+ * Created by Kristian Lange on 2017.
  */
 public class NifDispatcherActor extends UntypedActor {
 
-    private static final Logger.ALogger LOGGER = Logger.of(NifDispatcherActor.class);
+    private static final Logger.ALogger LOGGER =
+            Logger.of(NifDispatcherActor.class);
 
     public enum Protocol {REGISTER, UNREGISTER}
 
@@ -41,14 +43,16 @@ public class NifDispatcherActor extends UntypedActor {
 
     @Override
     public void onReceive(final Object msg) throws Throwable {
-        if(msg instanceof JsonNode) {
+        if (msg instanceof JsonNode) {
             webSocketRegister.forEach(actorRef -> actorRef.tell(msg, self()));
-        } else if(Protocol.REGISTER.equals(msg)) {
+        } else if (Protocol.REGISTER.equals(msg)) {
             webSocketRegister.add(sender());
-            LOGGER.info("registered WebSocket actor to network interface " + nifName);
-        } else if(Protocol.UNREGISTER.equals(msg)) {
+            LOGGER.info("registered WebSocket actor to network interface " +
+                    nifName);
+        } else if (Protocol.UNREGISTER.equals(msg)) {
             webSocketRegister.remove(sender());
-            LOGGER.info("unregistered WebSocket actor from network interface " + nifName);
+            LOGGER.info("unregistered WebSocket actor from network interface " +
+                    nifName);
         } else {
             unhandled(msg);
         }

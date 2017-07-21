@@ -8,6 +8,12 @@ import play.libs.Json;
 import javax.inject.Singleton;
 import java.sql.Timestamp;
 
+/**
+ * Utility class that extracts data from network packets and puts them into JSON
+ * strings
+ * <p>
+ * Created by Kristian Lange on 2017.
+ */
 @Singleton
 public class PacketToJsonTransfer {
 
@@ -74,19 +80,27 @@ public class PacketToJsonTransfer {
 
     private JsonNode getTcpPacketMetrics(TcpPacket tcpPacket) {
         ObjectNode jsonNode = Json.newObject();
-        jsonNode.put("srcPort", "" + tcpPacket.getHeader().getSrcPort().valueAsInt());
-        jsonNode.put("srcPortName", "" + tcpPacket.getHeader().getSrcPort().name());
-        jsonNode.put("dstPort", "" + tcpPacket.getHeader().getDstPort().valueAsInt());
-        jsonNode.put("dstPortName", "" + tcpPacket.getHeader().getDstPort().name());
+        jsonNode.put("srcPort",
+                "" + tcpPacket.getHeader().getSrcPort().valueAsInt());
+        jsonNode.put("srcPortName",
+                "" + tcpPacket.getHeader().getSrcPort().name());
+        jsonNode.put("dstPort",
+                "" + tcpPacket.getHeader().getDstPort().valueAsInt());
+        jsonNode.put("dstPortName",
+                "" + tcpPacket.getHeader().getDstPort().name());
         return jsonNode;
     }
 
     private JsonNode getUdpPacketMetrics(UdpPacket udpPacket) {
         ObjectNode jsonNode = Json.newObject();
-        jsonNode.put("srcPort", "" + udpPacket.getHeader().getSrcPort().valueAsInt());
-        jsonNode.put("srcPortName", "" + udpPacket.getHeader().getSrcPort().name());
-        jsonNode.put("dstPort", "" + udpPacket.getHeader().getDstPort().valueAsInt());
-        jsonNode.put("dstPortName", "" + udpPacket.getHeader().getDstPort().name());
+        jsonNode.put("srcPort",
+                "" + udpPacket.getHeader().getSrcPort().valueAsInt());
+        jsonNode.put("srcPortName",
+                "" + udpPacket.getHeader().getSrcPort().name());
+        jsonNode.put("dstPort",
+                "" + udpPacket.getHeader().getDstPort().valueAsInt());
+        jsonNode.put("dstPortName",
+                "" + udpPacket.getHeader().getDstPort().name());
         return jsonNode;
     }
 

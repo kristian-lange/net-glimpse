@@ -22,9 +22,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Using Pcap4J (https://github.com/kaitoy/pcap4j#documents) to access network
+ * Using Pcap4J (https://github.com/kaitoy/pcap4j) to access network
  * interfaces and forward some of the packages' data (metrics) to the
  * appropriate {@link NifDispatcherActor}.
+ * <p>
+ * Created by Kristian Lange on 2017.
  */
 @Singleton
 public class PcapInitializer {
@@ -103,7 +105,7 @@ public class PcapInitializer {
         runPcapToDispatcher(pcapHandle, nifName);
 
         lifecycle.addStopHook(() -> {
-            if (pcapHandle != null && pcapHandle.isOpen()) {
+            if (pcapHandle.isOpen()) {
                 pcapHandle.close();
             }
             return CompletableFuture.completedFuture(null);
@@ -137,9 +139,7 @@ public class PcapInitializer {
     }
 
     private void runPcapToDispatcher(PcapHandle pcapHandle, String nifName) {
-        Runnable r = () -> {
-            pcapToDispatcher(pcapHandle, nifName);
-        };
+        Runnable r = () -> pcapToDispatcher(pcapHandle, nifName);
         CompletableFuture pcapToWebSocketFuture = CompletableFuture
                 .runAsync(r, httpExecutionContext.current());
     }

@@ -6,9 +6,10 @@ import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
- * Akka actor handling a single WebSocket. Sends messages to the WebSocket's webSocketOut, registers and unregisters itself to the NifDispatcherActor.
+ * Akka actor handling a single WebSocket. Sends messages to the WebSocket's
+ * webSocketOut, registers and unregisters itself to the NifDispatcherActor.
  * <p>
- * Created by klange on 15.06.17.
+ * Created by Kristian Lange on 2017.
  */
 public class WebSocketActor extends UntypedActor {
 
