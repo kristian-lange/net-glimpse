@@ -1,6 +1,6 @@
 ![screenshot](docs/ng-logo2_l.png)
 
-I wanted to have a little tool that can gives me a quick overview on what's going in my network right now, displaying it in the browser. Tools like tcpdump or [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
+I wanted a little tool that gives me a quick overview on what's going in my network right now, displaying it in the browser. Tools like tcpdump or [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
 
 net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or Internet) in real-time, and 2) Streaming of header data from your network interfaces via WebSockets.
 
