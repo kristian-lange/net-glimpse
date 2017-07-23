@@ -105,7 +105,7 @@ E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?
 
 ### Visualization Configuration
 
-Many parameters of the visualizations (e.g. edge colors, node size, node repulsion, cleaning interval, blacklists for IP and MAC addresses) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
+Many parameters of the visualizations (e.g. edge colors, node size, node repulsion, cleaning interval, blacklists for IP and MAC addresses) can be changed in [`./config/glimpse.conf`](https://github.com/kristian-lange/net-glimpse/blob/master/conf/glimpse.conf). Have a look - they have comments.
 
 ![screenshot](docs/screenshot2.png)
 
