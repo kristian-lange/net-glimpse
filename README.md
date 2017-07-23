@@ -112,7 +112,7 @@ Many parameters of the visualizations can be changed, e.g.
 * Cleaning interval and max age of nodes
 * Blacklist and whitelist for IP and MAC addresses 
 
-The configuration file is in [`./config/glimpse.conf`](https://github.com/kristian-lange/net-glimpse/blob/master/conf/glimpse.conf). More details are in the comments in the config file.
+The configuration file is in [`./config/glimpse.conf`](https://github.com/kristian-lange/net-glimpse/blob/master/conf/glimpse.conf). More details are in the comments of the config file.
 
 ![screenshot](docs/screenshot2.png)
 
