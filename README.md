@@ -28,6 +28,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 * [Streaming of header data from your network interfaces via WebSockets](#streaming-of-header-data-from-your-network-interfaces-via-websockets-backend)
   * [Usage in JavaScript](#usage-in-javascript)
   * [Backend configuration](#backend-configuration)
+* [Build yourself](#build-yourself)  
 
 
 ## How to run
@@ -164,4 +165,4 @@ All parameters that can be specified via -D run parameters can be set in `./conf
 
 ## Build yourself
 
-If you don't trust net-glimpse' pre-build releases you can build it yourself. It uses [sbt](http://www.scala-sbt.org/) as build tool. Just download the sourc code and run `sbt dist`. In `./target/universal/` will be the built `.zip` file. More information can be found in https://www.playframework.com/documentation/2.5.x/Deploying or https://www.playframework.com/documentation/2.5.x/BuildOverview.
+If you don't trust net-glimpse' pre-build releases you can build it yourself. It uses [sbt](http://www.scala-sbt.org/) as build tool. Just download the source code and run `sbt dist`. In `./target/universal/` will be the built `.zip` file. More information can be found in https://www.playframework.com/documentation/2.5.x/Deploying or https://www.playframework.com/documentation/2.5.x/BuildOverview.
