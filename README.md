@@ -1,6 +1,6 @@
 ![screenshot](docs/ng-logo2_l.png)
 
-I wanted to have a little tool that can gives me a quick overview on what's going in my network right now, displaying it in the browser. Tools like tcpdump or [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
+I wanted a little tool that gives me a quick overview on what's going in my network right now, displaying it in the browser  so I can access it easily whenever and I want. Tools like tcpdump or [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
 
 net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or Internet) in real-time, and 2) Streaming of header data from your network interfaces via WebSockets.
 
@@ -28,6 +28,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 * [Streaming of header data from your network interfaces via WebSockets](#streaming-of-header-data-from-your-network-interfaces-via-websockets-backend)
   * [Usage in JavaScript](#usage-in-javascript)
   * [Backend configuration](#backend-configuration)
+* [Build yourself](#build-yourself)  
 
 
 ## How to run
@@ -105,7 +106,14 @@ E.g. [`http://localhost:9000/glimpse?nif=wlp3s0`](http://localhost:9000/glimpse?
 
 ### Visualization Configuration
 
-Many parameters of the visualizations (e.g. edge colors, node size, node repulsion, cleaning interval, blacklists for IP and MAC addresses) can be changed in `./config/glimpse.conf`. Have a look - they have comments.
+Many parameters of the visualizations can be changed, e.g.
+
+* Edge colors and annotation
+* Node size and node repulsion
+* Cleaning interval and max age of nodes
+* Blacklist and whitelist for IP and MAC addresses 
+
+The configuration file is in [`./config/glimpse.conf`](https://github.com/kristian-lange/net-glimpse/blob/master/conf/glimpse.conf). More details are in the comments of the config file.
 
 ![screenshot](docs/screenshot2.png)
 
@@ -153,3 +161,8 @@ e.g. `./bin/net-glimpse -Dhttp.address=192.168.178.160 -Dhttp.port=80 -Dnif=wlp3
 #### Via `conf/application.conf`
 
 All parameters that can be specified via -D run parameters can be set in `./conf/application.conf` too.
+
+
+## Build yourself
+
+If you don't trust net-glimpse' pre-build releases you can build it yourself. It uses [sbt](http://www.scala-sbt.org/) as build tool. Just download the source code and run `sbt dist`. In `./target/universal/` will be the built `.zip` file. More information can be found in https://www.playframework.com/documentation/2.5.x/Deploying or https://www.playframework.com/documentation/2.5.x/BuildOverview.
