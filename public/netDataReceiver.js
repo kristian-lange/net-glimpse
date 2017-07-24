@@ -18,13 +18,11 @@ var netDataReceiver = {};
     socket.onmessage = function (event) {
       var packet = JSON.parse(event.data);
       if (packet.ethernet && typeof graphEther !== 'undefined' &&
-        !isInBlacklist(etherBlacklist, packet.ethernet.macSrcAddr) &&
-        !isInBlacklist(etherBlacklist, packet.ethernet.macDstAddr)) {
+        isInEtherWhitelistAndNotInEtherBlacklist(packet)) {
         graphEther.fill(getParameterForEtherVisu(packet));
       }
       if (packet.ip && typeof graphIp !== 'undefined' &&
-        !isInBlacklist(ipBlacklist, packet.ip.srcAddr) &&
-        !isInBlacklist(ipBlacklist, packet.ip.dstAddr)) {
+        isInIpWhitelistAndNotInIpBlacklist(packet)) {
         graphIp.fill(getParameterForIPVisu(packet));
       }
     }
@@ -172,8 +170,40 @@ var netDataReceiver = {};
     return color;
   }
 
-  function isInBlacklist(blacklist, addr) {
-    return blacklist.some(function (regexp) {
+  // Check if the src AND dst MAC address is not in the blacklist and
+  // check if the src OR dst address is in the whitelist - but only if the whitelist has at least one element.
+  // If the whitelist has no element it is ignored.
+  function isInEtherWhitelistAndNotInEtherBlacklist(packet) {
+    var srcAddr = packet.ethernet.macSrcAddr;
+    var dstAddr = packet.ethernet.macDstAddr;
+    return !isInList(srcAddr, etherBlacklist) && !isInList(dstAddr, etherBlacklist) &&
+      (etherWhitelist.length === 0 || isInList(srcAddr, etherWhitelist) || isInList(dstAddr, etherWhitelist))  ;
+  }
+
+  // Check if the src AND dst Internet address (format 'IP:port') is not in the blacklist and
+  // check if the src OR dst address is in the whitelist - but only if the whitelist has at least one element.
+  // If the whitelist has no element it is ignored.
+  function isInIpWhitelistAndNotInIpBlacklist(packet) {
+    var srcAddr;
+    var dstAddr
+    if (packet.tcp) {
+      srcAddr = packet.ip.srcAddr + ":" + packet.tcp.srcPort;
+      dstAddr = packet.ip.dstAddr + ":" + packet.tcp.dstPort;
+    } else if (packet.udp) {
+      srcAddr = packet.ip.srcAddr + ":" + packet.udp.srcPort;
+      dstAddr = packet.ip.dstAddr + ":" + packet.udp.dstPort;
+    } else {
+      srcAddr = packet.ip.srcAddr;
+      dstAddr = packet.ip.dstAddr;
+    }
+    return !isInList(srcAddr, ipBlacklist) && !isInList(dstAddr, ipBlacklist) &&
+      (ipWhitelist.length === 0 || isInList(srcAddr, ipWhitelist) || isInList(dstAddr, ipWhitelist));
+  }
+
+  // Evalutates all elements of an array of regexes if they fulfill the given addr
+  // Used for whitelists and blacklists
+  function isInList(addr, regexArray) {
+    return regexArray.some(function (regexp) {
       return regexp.test(addr);
     });
   }
