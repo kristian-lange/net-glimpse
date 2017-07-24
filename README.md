@@ -1,6 +1,6 @@
 ![screenshot](docs/ng-logo2_l.png)
 
-I wanted a little tool that gives me a quick overview on what's going in my network right now, displaying it in the browser. Tools like tcpdump or [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
+I wanted a little tool that gives me a quick overview on what's going in my network right now, displaying it in the browser  so I can access it easily whenever and I want. Tools like tcpdump or [Wireshark](https://www.wireshark.org/) are great but don't give you this 'glimpse'.
 
 net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or Internet) in real-time, and 2) Streaming of header data from your network interfaces via WebSockets.
 
@@ -160,3 +160,8 @@ e.g. `./bin/net-glimpse -Dhttp.address=192.168.178.160 -Dhttp.port=80 -Dnif=wlp3
 #### Via `conf/application.conf`
 
 All parameters that can be specified via -D run parameters can be set in `./conf/application.conf` too.
+
+
+## Build yourself
+
+If you don't trust net-glimpse' pre-build releases you can build it yourself. It uses [sbt](http://www.scala-sbt.org/) as build tool. Just download the sourc code and run `sbt dist`. In `./target/universal/` will be the built `.zip` file. More information can be found in https://www.playframework.com/documentation/2.5.x/Deploying or https://www.playframework.com/documentation/2.5.x/BuildOverview.
