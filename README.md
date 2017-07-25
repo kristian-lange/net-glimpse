@@ -120,6 +120,8 @@ The configuration file is in [`./config/glimpse.conf`](https://github.com/kristi
 
 ## Streaming of header data from your network interfaces via WebSockets (backend)
 
+Usually it's not possible to access network interfaces from within a browser. net-glimpse uses pcap4j to access the interfaces and then streams the header data via WebSockets into the browser. You can use this part of net-glimpse independent of the visualization.
+
 ### Usage in JavaScript
 
 If you just want to get the header data without the visualization you have to open a WebSocket with the URL `/netdata` and the network interface you want to intercept has to be specified in the query string with the parameter 'nif'. 
@@ -127,7 +129,7 @@ If you just want to get the header data without the visualization you have to op
 E.g. in JavaScript (browser) to get traffic from the network interface `wlp3s0` one could write
 
 ```javascript
-var socket = new WebSocket(ws://myhost/netdata/?nif=wlp3s0);
+var socket = new WebSocket("ws://myhost/netdata/?nif=wlp3s0");
 ```
 
 or more generally with secure WebSockets and assuming net-glimpse runs on the same host as your JavaScript is served from.
