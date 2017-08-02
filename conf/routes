@@ -6,7 +6,7 @@ GET     /                           controllers.Assets.at(path="/public", file="
 GET     /glimpse                    controllers.Assets.at(path="/public", file="glimpse.html")
 GET     /ipglimpse                  controllers.Assets.at(path="/public", file="ipglimpse.html")
 GET     /etherglimpse               controllers.Assets.at(path="/public", file="etherglimpse.html")
-GET     /netdata                    controllers.HomeController.netdata(nif ?= null)
+GET     /netdata                    controllers.Home.netdata(nif ?= null)
 
 GET     /assets/glimpse.conf        controllers.ExtAssets.at(filePath="/conf/glimpse.conf")
 
