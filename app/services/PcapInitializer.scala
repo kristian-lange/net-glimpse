@@ -29,11 +29,6 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
   private val logger = Logger(this.getClass)
 
   /**
-    * Default network interface (specified in application.conf)
-    */
-  private val defaultNifName = configuration.getString("nif", "empty")
-
-  /**
     * If false net-glimpse filters out its own traffic
     * (specified in application.conf)
     */
@@ -64,7 +59,7 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
     * @param nifName Name of the network interface to intercept
     * @return Returns the actor reference of the [[NifDispatcherActor]] that handles this nif
     */
-  def getNifDispatcher(nifName: String = defaultNifName): ActorRef = {
+  def getNifDispatcher(nifName: String): ActorRef = {
 
     // If it dispatcher exists already just return it
     if (nifDispatcherMap.contains(nifName)) return nifDispatcherMap(nifName)
@@ -94,17 +89,17 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
     pcapDispatcherActorRef
   }
 
-  private def openPcap(networkInterfaceName: String, snaplen: Int): PcapHandle = {
+  private def openPcap(nifName: String, snaplen: Int): PcapHandle = {
     try {
-      val nif = Pcaps.getDevByName(networkInterfaceName)
-      if (nif == null) throw new RuntimeException("Couldn't open network interface " + networkInterfaceName)
+      val nif = Pcaps.getDevByName(nifName)
+      if (nif == null) throw new RuntimeException("Couldn't open network interface " + nifName)
       else logger.info("Forward network traffic from " + nif.getName + "(" + nif.getAddresses + ")")
 
       nif.openLive(snaplen, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10)
     } catch {
       case e: PcapNativeException =>
-        if (defaultNifName == "empty") logger.error("No network interface specified!")
-        logger.error("Couldn't open network interface " + networkInterfaceName, e)
+        if (nifName == "empty") logger.error("No network interface specified!")
+        logger.error("Couldn't open network interface " + nifName, e)
         throw new RuntimeException(e)
     }
   }
