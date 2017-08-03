@@ -37,7 +37,7 @@ net-glimpse works on **Linux/Unix** (including **Mac OS X**) and **Windows**.
 
 ### Prerequisites
 
-* net-glimpse needs **Java 8** to run.
+* net-glimpse needs **Java 8** (JRE is enough) to run.
 * For the visualizations you need a modern browser (one that supports WebSockets and WebGL).
 * On **Windows** it is necessary to install _Npcap_ (https://nmap.org/npcap/) **OR** _WinPcap_ (https://www.winpcap.org/). On **Linux/Unix** _libpcap_ is needed.
 
