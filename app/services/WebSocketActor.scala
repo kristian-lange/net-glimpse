@@ -5,22 +5,23 @@ import play.api.libs.json.JsObject
 
 /**
   * Akka actor handling a single WebSocket. Sends messages to the WebSocket's
-  * out, registers and unregisters itself to the NifDispatcherActor.
-  * <p>
+  * out, subscribes and unsubscribes itself to/from the [[NifDispatcherActor]].
+  *
   * Created by Kristian Lange on 2017.
   */
 object WebSocketActor {
-  def props(out: ActorRef, nifDispatcherActor: ActorRef) = Props(new WebSocketActor(out, nifDispatcherActor))
+  def props(out: ActorRef, nifDispatcherActor: ActorRef) =
+    Props(new WebSocketActor(out, nifDispatcherActor))
 }
 
 class WebSocketActor(out: ActorRef, nifDispatcherActor: ActorRef) extends Actor {
 
   override def preStart() = {
-    nifDispatcherActor ! NifDispatcherActor.Subscribe()
+    nifDispatcherActor ! NifDispatcherActor.Subscribe
   }
 
   override def postStop() = {
-    nifDispatcherActor ! NifDispatcherActor.Unsubscribe()
+    nifDispatcherActor ! NifDispatcherActor.Unsubscribe
   }
 
   def receive = {

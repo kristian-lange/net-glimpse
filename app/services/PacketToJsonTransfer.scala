@@ -7,7 +7,7 @@ import play.api.libs.json.{JsObject, JsString, Json}
 
 /**
   * Utility class that extracts data from network packets and puts them into JSON
-  * <p>
+  *
   * Created by Kristian Lange on 2017.
   */
 object PacketToJsonTransfer {
@@ -15,21 +15,26 @@ object PacketToJsonTransfer {
   def packageToJson(packet: Packet, timestamp: Timestamp) = {
     var json = Json.obj()
     json += ("timestamp", JsString(timestamp.toString))
-    if (packet.contains(classOf[EthernetPacket])) json += ("ethernet", getEthernetPacketMetrics(packet.get(classOf[EthernetPacket])))
-    if (packet.contains(classOf[ArpPacket])) json += ("arp", getArpPacketMetrics(packet.get(classOf[ArpPacket])))
-    if (packet.contains(classOf[IpPacket])) json += ("ip", getIpPacketMetrics(packet.get(classOf[IpPacket])))
-    if (packet.contains(classOf[TcpPacket])) json += ("tcp", getTcpPacketMetrics(packet.get(classOf[TcpPacket])))
-    if (packet.contains(classOf[UdpPacket])) json += ("udp", getUdpPacketMetrics(packet.get(classOf[UdpPacket])))
+    if (packet.contains(classOf[EthernetPacket]))
+      json += ("ethernet", getEthernetPacketMetrics(packet.get(classOf[EthernetPacket])))
+    if (packet.contains(classOf[ArpPacket]))
+      json += ("arp", getArpPacketMetrics(packet.get(classOf[ArpPacket])))
+    if (packet.contains(classOf[IpPacket]))
+      json += ("ip", getIpPacketMetrics(packet.get(classOf[IpPacket])))
+    if (packet.contains(classOf[TcpPacket]))
+      json += ("tcp", getTcpPacketMetrics(packet.get(classOf[TcpPacket])))
+    if (packet.contains(classOf[UdpPacket]))
+      json += ("udp", getUdpPacketMetrics(packet.get(classOf[UdpPacket])))
     json
   }
 
-  def getEthernetPacketMetrics(ethernetPacket: EthernetPacket) = Json.obj(
+  private def getEthernetPacketMetrics(ethernetPacket: EthernetPacket) = Json.obj(
     "macSrcAddr" -> ethernetPacket.getHeader.getSrcAddr.toString,
     "macDstAddr" -> ethernetPacket.getHeader.getDstAddr.toString,
     "etherType" -> ethernetPacket.getHeader.getType.name
   )
 
-  def getArpPacketMetrics(arpPacket: ArpPacket) = Json.obj(
+  private def getArpPacketMetrics(arpPacket: ArpPacket) = Json.obj(
     "srcHardwareAddr" -> arpPacket.getHeader.getSrcHardwareAddr.toString,
     "srcProtocolAddr" -> arpPacket.getHeader.getSrcProtocolAddr.toString,
     "dstHardwareAddr" -> arpPacket.getHeader.getDstHardwareAddr.toString,
@@ -39,7 +44,7 @@ object PacketToJsonTransfer {
     "protocolType" -> arpPacket.getHeader.getProtocolType.name
   )
 
-  def getIpPacketMetrics(ipPacket: IpPacket) = Json.obj(
+  private def getIpPacketMetrics(ipPacket: IpPacket) = Json.obj(
     "srcAddr" -> ipPacket.getHeader.getSrcAddr.getHostAddress,
     "dstAddr" -> ipPacket.getHeader.getDstAddr.getHostAddress,
     "dstIsMc" -> ipPacket.getHeader.getDstAddr.isMulticastAddress,
@@ -47,14 +52,14 @@ object PacketToJsonTransfer {
     "version" -> ipPacket.getHeader.getVersion.name
   )
 
-  def getTcpPacketMetrics(tcpPacket: TcpPacket) = Json.obj(
+  private def getTcpPacketMetrics(tcpPacket: TcpPacket) = Json.obj(
     "srcPort" -> tcpPacket.getHeader.getSrcPort.valueAsInt,
     "srcPortName" -> tcpPacket.getHeader.getSrcPort.name,
     "dstPort" -> tcpPacket.getHeader.getDstPort.valueAsInt,
     "dstPortName" -> tcpPacket.getHeader.getDstPort.name
   )
 
-  def getUdpPacketMetrics(udpPacket: UdpPacket) = Json.obj(
+  private def getUdpPacketMetrics(udpPacket: UdpPacket) = Json.obj(
     "srcPort" -> udpPacket.getHeader.getSrcPort.valueAsInt,
     "srcPortName" -> udpPacket.getHeader.getSrcPort.name,
     "dstPort" -> udpPacket.getHeader.getDstPort.valueAsInt,

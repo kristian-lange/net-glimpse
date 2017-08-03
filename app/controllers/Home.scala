@@ -13,19 +13,22 @@ import services.{PcapInitializer, WebSocketActor}
   * Created by Kristian Lange on 2017.
   */
 @Singleton
-class Home @Inject()(implicit system: ActorSystem,
+class Home @Inject()(implicit actorSystem: ActorSystem,
                      materializer: Materializer,
                      pcapInitializer: PcapInitializer) extends Controller {
 
   /**
-    * Endpoint serves WebSockets that streams network header data
+    * This endpoint serves WebSockets that stream network header data
     *
     * @param nif Network interface name of the interface to be intercepted
     * @return WebSocket that streams network header data
     */
-  def netdata(nif: String) = WebSocket.accept[JsValue, JsValue] { request =>
-    val pcapDispatcherActorRef = pcapInitializer.getPcapDispatcherActorRef(nif)
-    ActorFlow.actorRef(out => WebSocketActor.props(out, pcapDispatcherActorRef))
+  def netdata(nif: String) = WebSocket.accept[JsValue, JsValue] {
+    request => {
+      val nifDispatcher = pcapInitializer.getNifDispatcher(nif)
+      ActorFlow.actorRef(out => WebSocketActor.props(out, nifDispatcher))
+    }
   }
+
 
 }

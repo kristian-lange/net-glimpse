@@ -10,16 +10,15 @@ import play.Configuration
 import play.api.Logger
 import play.api.inject.ApplicationLifecycle
 
-import scala.concurrent._
-import ExecutionContext.Implicits.global
 import scala.collection.mutable
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future, TimeoutException}
 
 /**
   * Using Pcap4J (https://github.com/kaitoy/pcap4j) to access network
-  * interfaces and forward some of the packages' data (metrics) to the
-  * appropriate {@link NifDispatcherActor}.
-  * <p>
+  * interfaces and forward packages' data (metrics) to the appropriate
+  * [[NifDispatcherActor]].
+  *
   * Created by Kristian Lange on 2017.
   */
 @Singleton
@@ -27,7 +26,7 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
                                 configuration: Configuration,
                                 lifecycle: ApplicationLifecycle) {
 
-  val logger = Logger(this.getClass())
+  private val logger = Logger(this.getClass)
 
   /**
     * Default network interface (specified in application.conf)
@@ -57,55 +56,69 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
   private val snaplen = configuration.getInt("snaplen", 65536)
 
   /**
-    * Map: network interface name -> actor reference to {@link NifDispatcherActor}
+    * Map: network interface name -> actor reference to [[NifDispatcherActor]]
     */
-  val pcapActorRefMap: mutable.HashMap[String, ActorRef] = mutable.HashMap()
+  val nifDispatcherMap: mutable.HashMap[String, ActorRef] = mutable.HashMap()
 
-  def getPcapDispatcherActorRef(nifName: String = defaultNifName): ActorRef = {
+  /**
+    * @param nifName Name of the network interface to intercept
+    * @return Returns the actor reference of the [[NifDispatcherActor]] that handles this nif
+    */
+  def getNifDispatcher(nifName: String = defaultNifName): ActorRef = {
 
-    if (pcapActorRefMap.contains(nifName)) return pcapActorRefMap(nifName)
+    // If it dispatcher exists already just return it
+    if (nifDispatcherMap.contains(nifName)) return nifDispatcherMap(nifName)
 
+    // Get new dispatcher actor for this nif
     val pcapDispatcherActorRef = actorSystem.actorOf(NifDispatcherActor.props(nifName))
-    pcapActorRefMap += (nifName -> pcapDispatcherActorRef)
+    nifDispatcherMap += (nifName -> pcapDispatcherActorRef)
 
+    // Open pcap
     val pcapHandle = openPcap(nifName, snaplen)
-    pcapToDispatcher(pcapHandle, nifName)
 
-    lifecycle.addStopHook {
-      () => if (pcapHandle.isOpen()) Future.successful(pcapHandle.close()) else Future.successful({})
+    // Send packets to dispatcher (do it async in parallel)
+    Future {
+      try {
+        pcapToDispatcher(pcapHandle, nifName)
+      } catch {
+        case e: NotOpenException => // Do nothing
+      }
     }
+
+    // Close pcap when application stops
+    lifecycle.addStopHook(() =>
+      if (pcapHandle.isOpen) Future.successful(pcapHandle.close)
+      else Future.successful({})
+    )
 
     pcapDispatcherActorRef
   }
 
-  def openPcap(networkInterfaceName: String, snaplen: Int): PcapHandle = try {
-    val nif = Pcaps.getDevByName(networkInterfaceName)
-    if (nif == null) throw new RuntimeException("Couldn't open network interface " + networkInterfaceName)
-    else logger.info("Forward network traffic from " + nif.getName + "(" + nif.getAddresses + ")")
-    nif.openLive(snaplen, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10)
-  } catch {
-    case e: PcapNativeException => {
-      if (defaultNifName == "empty") logger.error("No network interface specified!")
-      logger.error("Couldn't open network interface " + networkInterfaceName, e)
-      throw new RuntimeException(e)
+  private def openPcap(networkInterfaceName: String, snaplen: Int): PcapHandle = {
+    try {
+      val nif = Pcaps.getDevByName(networkInterfaceName)
+      if (nif == null) throw new RuntimeException("Couldn't open network interface " + networkInterfaceName)
+      else logger.info("Forward network traffic from " + nif.getName + "(" + nif.getAddresses + ")")
+
+      nif.openLive(snaplen, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10)
+    } catch {
+      case e: PcapNativeException =>
+        if (defaultNifName == "empty") logger.error("No network interface specified!")
+        logger.error("Couldn't open network interface " + networkInterfaceName, e)
+        throw new RuntimeException(e)
     }
   }
 
-  def pcapToDispatcher(pcapHandle: PcapHandle, nifName: String) {
-    // TODO Maybe there is a non-blocking way to get the packets
-    Future {
-      try
-          while (true) try {
-            val packet = pcapHandle.getNextPacketEx
-            if (packet != null && (skipOwnTraffic && !isOurPacket(packet))) {
-              val json = PacketToJsonTransfer.packageToJson(packet, pcapHandle.getTimestamp)
-              pcapActorRefMap(nifName) ! json
-            }
-          } catch {
-            case _: PcapNativeException | _: EOFException | _: TimeoutException => {}
-          }
-      catch {
-        case e: NotOpenException => {}
+  private def pcapToDispatcher(pcapHandle: PcapHandle, nifName: String) {
+    while (true) {
+      try {
+        val packet = pcapHandle.getNextPacketEx
+        if (packet != null && (!skipOwnTraffic || !isOurPacket(packet))) {
+          val json = PacketToJsonTransfer.packageToJson(packet, pcapHandle.getTimestamp)
+          nifDispatcherMap(nifName) ! json
+        }
+      } catch {
+        case _: PcapNativeException | _: EOFException | _: TimeoutException => // Just ignore and continue
       }
     }
   }
@@ -115,7 +128,7 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
     * packets are TCP packets that originate from our IP and port - or are
     * destined to our IP and port
     */
-  def isOurPacket(packet: Packet): Boolean = {
+  private def isOurPacket(packet: Packet): Boolean = {
     if (!packet.contains(classOf[IpPacket]) || !packet.contains(classOf[TcpPacket])) return false
 
     val ipHeader = packet.get(classOf[IpPacket]).getHeader

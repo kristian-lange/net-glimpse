@@ -9,37 +9,37 @@ import scala.collection.mutable.ArrayBuffer
 
 /**
   * Akka actor handling a single network interface and forwards all arriving
-  * messages to all subscribing {@link WebSocketActor}. It also cares for a
+  * messages to all subscribing [[WebSocketActor]]. It also cares for a
   * WebSocket register where WebSocket actors can subscribe and unsubscribe.
-  * <p>
-  * It is created by the {@link PcapInitializer}.
-  * <p>
+  *
+  * A new NifDispatcherActor is created by the [[PcapInitializer]].
+  *
   * Created by Kristian Lange on 2017.
   */
 object NifDispatcherActor {
 
   def props(nifName: String) = Props(new NifDispatcherActor(nifName))
 
-  case class Subscribe()
+  case object Subscribe
 
-  case class Unsubscribe()
+  case object Unsubscribe
 
 }
 
 class NifDispatcherActor(nifName: String) extends Actor {
 
-  val logger: Logger = Logger(this.getClass())
+  private val logger: Logger = Logger(this.getClass)
 
-  var webSocketRegister: ArrayBuffer[ActorRef] = ArrayBuffer()
+  private val webSocketRegister: ArrayBuffer[ActorRef] = ArrayBuffer()
 
   def receive = {
     case msg: JsObject =>
-      webSocketRegister.foreach(w => w ! msg)
-    case Subscribe() =>
-      webSocketRegister += sender()
+      webSocketRegister.foreach(ws => ws ! msg)
+    case Subscribe =>
+      webSocketRegister += sender
       logger.info("subscribed WebSocket to network interface " + nifName)
-    case Unsubscribe() =>
-      webSocketRegister -= sender()
+    case Unsubscribe =>
+      webSocketRegister -= sender
       logger.info("unsubscribed WebSocket from network interface " + nifName)
   }
 
