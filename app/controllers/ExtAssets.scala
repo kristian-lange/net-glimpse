@@ -4,47 +4,39 @@ import java.io.File
 import javax.inject.Inject
 
 import play.Environment
-import play.api.mvc.{Action, AnyContent, Controller}
+import play.api.Logger
+import play.api.mvc.{Action, Controller}
 
 /**
   * Controller for loading of external files (outside of jar)
   *
-  * It's an altered version of [[ExternalAssets]] that allows to serve files
-  * even in production mode. Since this could be used to deliver ANY file from
-  * the local file system it's important to specify the file's name in the
-  * 'routes' file and NOT to use any '*'.
+  * Created by Kristian Lange in 2017.
   *
-  * All assets are served with max-age=3600 cache directive.
-  *
-  * You can use this controller in any application, just by declaring the appropriate route. For example:
-  * {{{
-  * GET     /assets/\uFEFF*file               controllers.ExternalAssets.at(path="/home/peter/myplayapp/external", file)
-  * GET     /assets/\uFEFF*file               controllers.ExternalAssets.at(path="C:\external", file)
-  * GET     /assets/\uFEFF*file               controllers.ExternalAssets.at(path="relativeToYourApp", file)
-  * }}}
   */
 class ExtAssets @Inject()(environment: Environment) extends Controller {
 
-  val AbsolutePath = """^(/|[a-zA-Z]:\\).*""".r
+  private val logger: Logger = Logger(this.getClass)
 
   /**
-    * Generates an `Action` that serves a static resource from an external folder
+    * Generates an `Action` that serves a static resource from within the
+    * application's folder or if the application was started from the bin/
+    * folder it uses the parent (important for Windows)
     *
-    * @param rootPath the root folder for searching the static resource files such as `"/home/peter/public"`, `C:\external` or `relativeToYourApp`
-    * @param file     the file part extracted from the URL
+    * @param filePath the file path
     */
-  def at(rootPath: String, file: String): Action[AnyContent] = Action { request =>
-    val fileToServe = rootPath match {
-      case AbsolutePath(_) => new File(rootPath, file)
-      case _ => new File(environment.getFile(rootPath), file)
-    }
+  def at(filePath: String) = Action { _ =>
+    var rootPath = environment.rootPath.getAbsolutePath
+    if (rootPath.endsWith("bin") || rootPath.endsWith("bin/"))
+      rootPath = environment.rootPath.getParent
 
+    val fileToServe = new File(rootPath + filePath)
     if (fileToServe.exists) {
-      Ok.sendFile(fileToServe, inline = true).withHeaders(CACHE_CONTROL -> "max-age=3600")
+      logger.info("Loading external asset file " + fileToServe.getAbsolutePath)
+      Ok.sendFile(fileToServe, inline = true)
     } else {
+      logger.info("Couldn't find external asset file " + fileToServe.getAbsolutePath)
       NotFound
     }
   }
-
 
 }
