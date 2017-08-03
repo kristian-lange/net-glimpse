@@ -10,7 +10,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 
 ### Used technologies
 
-* Java, JavaScript
+* Scala, JavaScript
 * Pcap4J (https://github.com/kaitoy/pcap4j) to access network interfaces
 * Play Framework and sbt
 * [Akka](http://akka.io/) to distribute network interface data to multiple WebSockets
