@@ -3,7 +3,7 @@ package services
 import java.sql.Timestamp
 
 import org.pcap4j.packet._
-import play.api.libs.json.{JsObject, JsString, Json}
+import play.api.libs.json.{JsString, Json}
 
 /**
   * Utility class that extracts data from network packets and puts them into JSON

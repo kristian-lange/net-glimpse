@@ -82,7 +82,7 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
 
     // Close pcap when application stops
     lifecycle.addStopHook(() =>
-      if (pcapHandle.isOpen) Future.successful(pcapHandle.close)
+      if (pcapHandle.isOpen) Future.successful(pcapHandle.close())
       else Future.successful({})
     )
 
