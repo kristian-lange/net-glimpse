@@ -3,7 +3,7 @@ package services
 import java.sql.Timestamp
 
 import org.pcap4j.packet._
-import play.api.libs.json.{JsString, Json}
+import play.api.libs.json.{JsString, JsValue, Json}
 
 /**
   * Utility class that extracts data from network packets and puts them into JSON
@@ -12,7 +12,7 @@ import play.api.libs.json.{JsString, Json}
   */
 object PacketToJsonTransfer {
 
-  def packageToJson(packet: Packet, timestamp: Timestamp) = {
+  def packageToJson(packet: Packet, timestamp: Timestamp): JsValue = {
     var json = Json.obj()
     json += ("timestamp", JsString(timestamp.toString))
     if (packet.contains(classOf[EthernetPacket]))

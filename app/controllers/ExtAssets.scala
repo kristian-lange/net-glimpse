@@ -5,7 +5,8 @@ import javax.inject.Inject
 
 import play.Environment
 import play.api.Logger
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{AbstractController, ControllerComponents}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
   * Controller for loading of external files (outside of jar)
@@ -13,7 +14,9 @@ import play.api.mvc.{Action, Controller}
   * Created by Kristian Lange in 2017.
   *
   */
-class ExtAssets @Inject()(environment: Environment) extends Controller {
+class ExtAssets @Inject()(environment: Environment,
+                          controllerComponents: ControllerComponents)
+  extends AbstractController(controllerComponents) {
 
   private val logger: Logger = Logger(this.getClass)
 
