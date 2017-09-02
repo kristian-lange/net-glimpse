@@ -28,7 +28,7 @@ net-glimpse has two parts: 1) Visualization of network traffic (Ethernet and/or 
 * [Streaming of header data from your network interfaces via WebSockets](#streaming-of-header-data-from-your-network-interfaces-via-websockets-backend)
   * [Usage in JavaScript](#usage-in-javascript)
   * [Backend configuration](#backend-configuration)
-* [Build yourself](#build-yourself)  
+* [Build yourself and modify the source code](#build-yourself-and-modify-the-source-code)  
 
 
 ## How to run
@@ -165,6 +165,13 @@ e.g. `./bin/net-glimpse -Dhttp.address=192.168.178.160 -Dhttp.port=80 -Dnif=wlp3
 All parameters that can be specified via -D run parameters can be set in `./conf/application.conf` too.
 
 
-## Build yourself
+## Build yourself and modify the source code
 
 If you don't trust net-glimpse' pre-build releases you can build it yourself. It uses [sbt](http://www.scala-sbt.org/) as build tool. Just download the source code and run `sbt dist`. In `./target/universal/` will be the built `.zip` file. More information can be found in https://www.playframework.com/documentation/2.5.x/Deploying or https://www.playframework.com/documentation/2.5.x/BuildOverview.
+
+If you want to modify the source code (e.g. you need more data from the network packets) the following files are probably where you want to start:
+
+* [/app/services/PacketToJsonTransfer.scala](https://github.com/kristian-lange/net-glimpse/blob/master/app/services/PacketToJsonTransfer.scala) - serialises the packet data into JSON (backend-side)
+* [/public/netDataReceiver.js](https://github.com/kristian-lange/net-glimpse/blob/master/public/netDataReceiver.js) - deserialising JSON in the browser
+* [/public/p5visu.js](https://github.com/kristian-lange/net-glimpse/blob/master/public/p5visu.js) - visalisation with p5.js
+* [/public/graph.js](https://github.com/kristian-lange/net-glimpse/blob/master/public/graph.js) - graph data structure and physics
