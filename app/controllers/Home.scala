@@ -4,7 +4,7 @@ import javax.inject._
 
 import akka.actor.ActorSystem
 import akka.stream.Materializer
-import play.Configuration
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.libs.streams.ActorFlow
 import play.api.mvc._
@@ -17,12 +17,14 @@ import services.{PcapInitializer, WebSocketActor}
 class Home @Inject()(implicit actorSystem: ActorSystem,
                      materializer: Materializer,
                      configuration: Configuration,
-                     pcapInitializer: PcapInitializer) extends Controller {
+                     pcapInitializer: PcapInitializer,
+                     controllerComponents: ControllerComponents)
+  extends AbstractController(controllerComponents) {
 
   /**
     * Default network interface (specified in application.conf)
     */
-  private val defaultNifName = configuration.getString("nif", "empty")
+  private val defaultNifName = configuration.get[String]("nif")
 
   /**
     * This endpoint serves WebSockets that stream network header data
@@ -30,7 +32,7 @@ class Home @Inject()(implicit actorSystem: ActorSystem,
     * @param nif Network interface name of the interface to be intercepted
     * @return WebSocket that streams network header data
     */
-  def netdata(nif: String = defaultNifName) = WebSocket.accept[JsValue, JsValue] {
+  def netdata(nif: String = defaultNifName): WebSocket = WebSocket.accept[JsValue, JsValue] {
     _ => {
       val nifDispatcher =
         if (nif != null && nif.nonEmpty) pcapInitializer.getNifDispatcher(nif)

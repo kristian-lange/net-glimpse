@@ -6,7 +6,7 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.{ActorRef, ActorSystem}
 import org.pcap4j.core._
 import org.pcap4j.packet.{IpPacket, Packet, TcpPacket}
-import play.Configuration
+import play.api.Configuration
 import play.api.Logger
 import play.api.inject.ApplicationLifecycle
 
@@ -32,23 +32,23 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
     * If false net-glimpse filters out its own traffic
     * (specified in application.conf)
     */
-  private val skipOwnTraffic = configuration.getBoolean("skipOwnTraffic", true)
+  private val skipOwnTraffic = configuration.get[Boolean]("skipOwnTraffic")
 
   /**
     * IP / host the Play framework is  bound to (default 0.0.0.0)
     */
-  private val httpAddress = configuration.getString("play.server.http.address")
+  private val httpAddress = configuration.get[String]("play.server.http.address")
 
   /**
     * Port the Play framework is bound to (default 9000)
     */
-  private val httpPort = configuration.getInt("play.server.http.port")
+  private val httpPort = configuration.get[Int]("play.server.http.port")
 
   /**
     * Specifies the portion of the network packet to capture
     * https://serverfault.com/questions/253613
     */
-  private val snaplen = configuration.getInt("snaplen", 65536)
+  private val snaplen = configuration.get[Int]("snaplen")
 
   /**
     * Map: network interface name -> actor reference to [[NifDispatcherActor]]

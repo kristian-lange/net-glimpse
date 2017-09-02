@@ -1,12 +1,14 @@
 name := """net-glimpse"""
 
-version := "1.6"
+version := "1.7"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.11"
+scalaVersion := "2.12.2"
 
 libraryDependencies ++= Seq(
+  guice,
+  "com.typesafe.play" %% "play-json" % "2.6.0",
   "org.pcap4j" % "pcap4j-core" % "1.7.1",
   "org.pcap4j" % "pcap4j-packetfactory-static" % "1.7.1"
 )

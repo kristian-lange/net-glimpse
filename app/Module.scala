@@ -2,6 +2,8 @@ import com.google.inject.AbstractModule
 import org.pcap4j.core.{PcapNativeException, Pcaps}
 import play.api.Logger
 
+import scala.collection.JavaConverters._
+
 class Module extends AbstractModule {
 
   private val logger: Logger = Logger(this.getClass)
@@ -9,8 +11,7 @@ class Module extends AbstractModule {
   def configure() = {
     // Print out all network interfaces so users know which names they have
     try {
-      import scala.collection.JavaConversions._
-      for (nif <- Pcaps.findAllDevs) {
+      for (nif <- Pcaps.findAllDevs.asScala) {
         Logger.info("NIF: " + nif.toString)
       }
     } catch {
