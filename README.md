@@ -167,7 +167,7 @@ All parameters that can be specified via -D run parameters can be set in `./conf
 
 ## Build yourself and modify the source code
 
-If you don't trust net-glimpse' pre-build releases you can build it yourself. It uses [sbt](http://www.scala-sbt.org/) as build tool. Just download the source code and run `sbt dist`. In `./target/universal/` will be the built `.zip` file. More information can be found in https://www.playframework.com/documentation/2.5.x/Deploying or https://www.playframework.com/documentation/2.5.x/BuildOverview.
+If you don't trust net-glimpse' pre-build releases you can build it yourself. It uses [sbt](http://www.scala-sbt.org/) as build tool. Just download the source code and run `sbt dist`. In `./target/universal/` will be the built `.zip` file. More information can be found in https://www.playframework.com/documentation/2.6.x/Deploying or https://www.playframework.com/documentation/2.6.x/BuildOverview.
 
 If you want to modify the source code (e.g. you need more data from the network packets) the following files are probably where you want to start:
 
