@@ -6,8 +6,7 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.{ActorRef, ActorSystem}
 import org.pcap4j.core._
 import org.pcap4j.packet.{IpPacket, Packet, TcpPacket}
-import play.api.Configuration
-import play.api.Logger
+import play.api.{Configuration, Logger}
 import play.api.inject.ApplicationLifecycle
 
 import scala.collection.mutable
@@ -57,19 +56,20 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
 
   /**
     * @param nifName Name of the network interface to intercept
-    * @return Returns the actor reference of the [[NifDispatcherActor]] that handles this nif
+    * @return Returns an Option to the actor reference of the [[NifDispatcherActor]] that handles
+    *         this nif
     */
-  def getNifDispatcher(nifName: String): ActorRef = {
+  def getNifDispatcher(nifName: String): Option[ActorRef] = {
 
     // If it dispatcher exists already just return it
-    if (nifDispatcherMap.contains(nifName)) return nifDispatcherMap(nifName)
+    if (nifDispatcherMap.contains(nifName)) return Some(nifDispatcherMap(nifName))
 
     // Get new dispatcher actor for this nif
     val pcapDispatcherActorRef = actorSystem.actorOf(NifDispatcherActor.props(nifName))
     nifDispatcherMap += (nifName -> pcapDispatcherActorRef)
 
     // Open pcap
-    val pcapHandle = openPcap(nifName, snaplen)
+    val pcapHandle = openPcap(nifName, snaplen).getOrElse(return None)
 
     // Send packets to dispatcher (do it async in parallel)
     Future {
@@ -86,21 +86,23 @@ class PcapInitializer @Inject()(implicit actorSystem: ActorSystem,
       else Future.successful({})
     )
 
-    pcapDispatcherActorRef
+    Some(pcapDispatcherActorRef)
   }
 
-  private def openPcap(nifName: String, snaplen: Int): PcapHandle = {
+  private def openPcap(nifName: String, snaplen: Int): Option[PcapHandle] = {
     try {
       val nif = Pcaps.getDevByName(nifName)
-      if (nif == null) throw new RuntimeException("Couldn't open network interface " + nifName)
-      else logger.info("Forward network traffic from " + nif.getName + "(" + nif.getAddresses + ")")
-
-      nif.openLive(snaplen, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10)
+      if (nif == null) {
+        Logger.error("Couldn't open network interface " + nifName)
+        return None
+      }
+      logger.info("Forward network traffic from " + nif.getName + "(" + nif.getAddresses + ")")
+      Some(nif.openLive(snaplen, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 10))
     } catch {
       case e: PcapNativeException =>
         if (nifName == "empty") logger.error("No network interface specified!")
         logger.error("Couldn't open network interface " + nifName, e)
-        throw new RuntimeException(e)
+        None
     }
   }
 

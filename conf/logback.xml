@@ -35,7 +35,6 @@
 
   <root level="INFO">
     <appender-ref ref="ASYNCFILE" />
-    <appender-ref ref="ASYNCSTDOUT" />
   </root>
 
 </configuration>
